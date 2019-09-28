@@ -38,7 +38,6 @@ def siftdown():
     while left < len(openlist):
         min = left
         right = left + 1
-        print("min is  " + str(min) + "left is " + str(left))
 
         # if the right is less than the total size, check if the right is less than the left
         if right < len(openlist):
@@ -90,19 +89,6 @@ def printList():
 
 
 def main():
-    list1 = [1, 2, 3, 4]
-
-    print(list1)
-    print('\n')
-
-    list1[0] = list1[len(list1) - 1]
-    print(list1)
-    print('\n')
-
-    #list1.remove(list1[len(list1) - 1])
-    del list1[-1]
-    print(list1)
-
     # insert 3 elements
     n1 = Treenode(3, None, (0,0))
     n2 = Treenode(5, None, (0,1))
@@ -124,14 +110,16 @@ def main():
     insert(n8)
     insert(n9)
     insert(n10)
-    printList()
 
+    printList()
     print('\n')
+
     # delete element
+    deleted = pop()
+    deleted = pop()
     deleted = pop()
     print ("deleted = " + str(deleted.f))
     printList()
-
 
 
 if __name__ == '__main__':
