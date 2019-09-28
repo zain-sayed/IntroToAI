@@ -5,14 +5,16 @@ class Treenode:
         self.parent = parent
         self.coordinates = coordinates
 
+
 # global openlist
 openlist = []
+
 
 # siftup to sort after insert
 def siftup():
     k = len(openlist) - 1
     while k > 0:
-        p = (k-1) / 2
+        p = (k-1) // 2
         current = openlist[k]
         parent = openlist[p]
 
@@ -27,6 +29,7 @@ def siftup():
         else:
             break
 
+
 # siftdown to sort after delete
 def siftdown():
     k = 0
@@ -35,6 +38,7 @@ def siftdown():
     while left < len(openlist):
         min = left
         right = left + 1
+        print("min is  " + str(min) + "left is " + str(left))
 
         # if the right is less than the total size, check if the right is less than the left
         if right < len(openlist):
@@ -51,29 +55,89 @@ def siftdown():
         else:
             break
 
+
 # insert to place into the openlist
 def insert(toinsert):
     openlist.append(toinsert)
     siftup()
+
 
 # pop to remove out of the openlist
 def pop():
     # base case, if size is 0 then we have an exception
     if len(openlist) == 0:
         print("Error, cannot pop an empty list. Exiting...")
-        return
-    #try:
-    #    if len(openlist) == 0:
-    #except ValueError as error:
-    #    print(error.args)
+        exit()
     # if size is 1, remove the first element
     if len(openlist) == 1:
         return openlist.remove(0)
     # now delete the root and replace it with the right most node, then siftdown
     todelete = openlist[0]
-    openlist[0] = openlist[len(openlist) - 1]
-    openlist.remove(len(openlist) - 1)
+    last = len(openlist) - 1
+    openlist[0] = openlist[last]
+    del openlist[-1]
     siftdown()
     return todelete
+
+# print the openlist
+def printList():
+    # print list
+    i = 0
+    while i < len(openlist):
+        node = openlist[i]
+        print(node.f)
+        i = i + 1
+
+
+def main():
+    list1 = [1, 2, 3, 4]
+
+    print(list1)
+    print('\n')
+
+    list1[0] = list1[len(list1) - 1]
+    print(list1)
+    print('\n')
+
+    #list1.remove(list1[len(list1) - 1])
+    del list1[-1]
+    print(list1)
+
+    # insert 3 elements
+    n1 = Treenode(3, None, (0,0))
+    n2 = Treenode(5, None, (0,1))
+    n3 = Treenode(9, None, (0,2))
+    n4 = Treenode(6, None, (0, 0))
+    n5 = Treenode(8, None, (0, 1))
+    n6 = Treenode(20, None, (0, 2))
+    n7 = Treenode(10, None, (0, 0))
+    n8 = Treenode(12, None, (0, 1))
+    n9 = Treenode(18, None, (0, 2))
+    n10 = Treenode(9, None, (0, 2))
+    insert(n1)
+    insert(n2)
+    insert(n3)
+    insert(n4)
+    insert(n5)
+    insert(n6)
+    insert(n7)
+    insert(n8)
+    insert(n9)
+    insert(n10)
+    printList()
+
+    print('\n')
+    # delete element
+    deleted = pop()
+    print ("deleted = " + str(deleted.f))
+    printList()
+
+
+
+if __name__ == '__main__':
+    main()
+
+
+
 
 
