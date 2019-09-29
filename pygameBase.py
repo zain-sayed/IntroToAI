@@ -32,12 +32,14 @@ for row in range(grid_height):
         else:
             grid[row].append(1)
 
-rand_start_x = random.randint(0,101)
-rand_start_y = random.randint(0,101)
-rand_goal_x = random.randint(0,101)
-rand_goal_y = random.randint(0,101)
+rand_start_x = random.randint(0,100)
+rand_start_y = random.randint(0,100)
+rand_goal_x = random.randint(0,100)
+rand_goal_y = random.randint(0,100)
+
 print(rand_start_x,  rand_start_y)
 print(rand_goal_x,rand_goal_y)
+
 grid[rand_start_x][rand_start_y] = 2
 grid[rand_goal_x][rand_goal_y] = 3
 
