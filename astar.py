@@ -166,13 +166,6 @@ def repeatedForwardAstar():
     globalvars.grid[x][y] = 4
     globalvars.currentX = x
     globalvars.currentY = y
-    #print(globalvars.currentX)
-    #print(globalvars.currentY)
-    #print("goal x = : " + str(globalvars.rand_goal_x))
-    #print("goal y = : " + str(globalvars.rand_goal_y))
-    print("x = " + str(x))
-    print ("y = " + str(y))
-    #print("b")
     #if globalvars.goalCord == currentNode.coordinates:
     if x == globalvars.rand_goal_x:
         if y == globalvars.rand_goal_y:
