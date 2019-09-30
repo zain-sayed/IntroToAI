@@ -17,6 +17,7 @@ def findh(x, y):
 # finds f value of a node
 def findf(x, y):
     return findg(x, y) + findh(x, y)
+    #return findg(x, y)
 
 
 # compare f values on openlist conflict
@@ -146,8 +147,13 @@ def repeatedForwardAstar():
     # add currnode to closed list and change color
     globalvars.closedlist.append(currentNode)
     globalvars.grid[x][y] = 4
-    currentX = x
-    currentY = y
+    globalvars.currentX = x
+    globalvars.currentY = y
+    print(globalvars.currentX)
+    print(globalvars.currentY)
+    if globalvars.goalCord == currentNode.coordinates:
+        goalState = True
+
 
 
 

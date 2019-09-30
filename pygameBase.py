@@ -36,19 +36,19 @@ for row in range(grid_height):
         else:
             globalvars.grid[row].append(1)
 
-rand_start_x = random.randint(0,100)
-rand_start_y = random.randint(0,100)
-rand_goal_x = random.randint(0,100)
-rand_goal_y = random.randint(0,100)
+#rand_start_x = random.randint(0,100)
+#rand_start_y = random.randint(0,100)
+#rand_goal_x = random.randint(0,100)
+#rand_goal_y = random.randint(0,100)
 
-print(rand_start_x,  rand_start_y)
-print(rand_goal_x,rand_goal_y)
+print(globalvars.rand_start_x,  globalvars.rand_start_y)
+print(globalvars.rand_goal_x,globalvars.rand_goal_y)
 
-globalvars.grid[rand_start_x][rand_start_y] = 2
-globalvars.grid[rand_goal_x][rand_goal_y] = 3
+globalvars.grid[globalvars.rand_start_x][globalvars.rand_start_y] = 2
+globalvars.grid[globalvars.rand_goal_x][globalvars.rand_goal_y] = 3
 
-startCord = (rand_start_x,rand_start_y)
-goalCord =  (rand_goal_x,rand_goal_y)
+startCord = (globalvars.rand_start_x,globalvars.rand_start_y)
+goalCord =  (globalvars.rand_goal_x,globalvars.rand_goal_y)
 
 startNode = Treenode(0, None, startCord)
 
@@ -115,8 +115,9 @@ while not done:
     goalState = False
     if (len(globalvars.openlist) != 0) and (goalState is False):
         repeatedForwardAstar()
-    #elif goalState is True:
+    elif goalState is True:
         # backtrack
+        done = True
 
     elif len(globalvars.openlist) == 0:
         print("Cannot find goal, path is blocked!")

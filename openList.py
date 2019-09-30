@@ -58,7 +58,6 @@ def siftdown():
 def insert(toinsert):
     globalvars.openlist.append(toinsert)
     siftup()
-    printList()
 
 
 # pop to remove out of the globalvars.openlist
