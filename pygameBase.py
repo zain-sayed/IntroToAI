@@ -2,6 +2,7 @@
  @author:zain
 """
 from openList import *
+from astar import *
 import random
 import pygame
 
@@ -66,6 +67,11 @@ pygame.display.set_caption("A* Grid")
 done = False
 clock = pygame.time.Clock()
 
+
+# insert starting node into openlist
+insert(startNode)
+
+
 # -------- Main Program Loop -----------
 while not done:
     # --- Main event loop
@@ -92,13 +98,18 @@ while not done:
             elif (grid[row][column] == 3):
                 color = RED
                 #Goal is RED
+
+            elif (grid[row][column] == 4):
+                color = LBLUE
+                #Path is LIGHT BLUE
             else:
                 color = BLACK
 
             pygame.draw.rect(screen,color,[BLOCK_WIDTH*column,BLOCK_HEIGHT*row,BLOCK_WIDTH,BLOCK_HEIGHT])
 
 
-
+    # A* algorithm will go here
+    repeatedForwardAstar()
 
     # --- Game logic should go here
 
@@ -117,7 +128,7 @@ while not done:
     pygame.display.flip()
 
     # --- Limit to 60 frames per second
-    clock.tick(4)
+    clock.tick(30)
 
 # Close the window and quit.
 pygame.quit()
