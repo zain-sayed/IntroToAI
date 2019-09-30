@@ -50,7 +50,7 @@ globalvars.grid[globalvars.rand_goal_x][globalvars.rand_goal_y] = 3
 startCord = (globalvars.rand_start_x,globalvars.rand_start_y)
 goalCord =  (globalvars.rand_goal_x,globalvars.rand_goal_y)
 
-startNode = Treenode(0, None, startCord)
+startNode = Treenode(0, 0, 0, None, startCord)
 
 
         #The zero/one here is appending a cell
@@ -112,12 +112,18 @@ while not done:
 
 
     # A* algorithm will go here
-    goalState = False
-    if (len(globalvars.openlist) != 0) and (goalState is False):
+    if (len(globalvars.openlist) != 0) and (globalvars.goalState is False):
         repeatedForwardAstar()
-    elif goalState is True:
+    elif globalvars.goalState is True:
         # backtrack
+        print('\n')
+        print('\n')
+        print("GOAL STATE IS TRUE")
+        print('\n')
+        print('\n')
+        time.sleep(60)
         done = True
+        break
 
     elif len(globalvars.openlist) == 0:
         print("Cannot find goal, path is blocked!")

@@ -2,8 +2,10 @@ import globalvars
 
 class Treenode:
     # initialize values
-    def __init__(self, f, parent, coordinates):
+    def __init__(self, f, g, h, parent, coordinates):
         self.f = f
+        self.g = g
+        self.h = h
         self.parent = parent
         self.coordinates = coordinates
 
@@ -16,7 +18,16 @@ def siftup():
         p = (k-1) // 2
         current = globalvars.openlist[k]
         parent = globalvars.openlist[p]
-
+        '''
+        if current.f == parent.f:
+            if current.g < parent.g:
+                # swap the current and parent
+                temp = globalvars.openlist[p]
+                globalvars.openlist[p] = globalvars.openlist[k]
+                globalvars.openlist[k] = temp
+                # move p to next level
+                k = p
+        '''
         # if the current is less than the parent, switch them as we bubble up
         if current.f < parent.f:
             # swap the current and parent
