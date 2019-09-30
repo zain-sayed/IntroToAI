@@ -10,6 +10,7 @@ class Treenode:
 openlist = []
 
 
+###################################### have to do an equal g value condition  ######################################  
 # siftup to sort after insert
 def siftup():
     k = len(openlist) - 1
