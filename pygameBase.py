@@ -1,11 +1,11 @@
 """
  @author:zain
 """
-#from openList import *
-from astar import *
 import random
 import pygame
 import time
+from astar import *
+from openList import *
 
 # Define some colors
 BLACK = (0, 0, 0)
@@ -21,20 +21,20 @@ BLOCK_HEIGHT = 5
 #Setting margin
 MARGIN = 0
 
-grid = []
+#grid = []
 grid_height = 101
     #int(input("Input a grid height: "))
 grid_width = 101
     #int(input("Input a grid width:  "))
 
 for row in range(grid_height):
-    grid.append([])
+    globalvars.grid.append([])
     for column in range(grid_width):
         coinFlip = random.randint(0, 100)
         if(coinFlip>24):
-            grid[row].append(0)
+            globalvars.grid[row].append(0)
         else:
-            grid[row].append(1)
+            globalvars.grid[row].append(1)
 
 rand_start_x = random.randint(0,100)
 rand_start_y = random.randint(0,100)
@@ -44,13 +44,13 @@ rand_goal_y = random.randint(0,100)
 print(rand_start_x,  rand_start_y)
 print(rand_goal_x,rand_goal_y)
 
-grid[rand_start_x][rand_start_y] = 2
-grid[rand_goal_x][rand_goal_y] = 3
+globalvars.grid[rand_start_x][rand_start_y] = 2
+globalvars.grid[rand_goal_x][rand_goal_y] = 3
 
 startCord = (rand_start_x,rand_start_y)
 goalCord =  (rand_goal_x,rand_goal_y)
 
-startNode = Treenode(0,None,startCord)
+startNode = Treenode(0, None, startCord)
 
 
         #The zero/one here is appending a cell
@@ -93,16 +93,16 @@ while not done:
     for row in range(grid_height):
         for column in range(grid_width):
 
-            if (grid[row][column] == 0):
+            if (globalvars.grid[row][column] == 0):
                 color = WHITE
-            elif (grid[row][column] == 2):
+            elif (globalvars.grid[row][column] == 2):
                 color = GREEN
                 #Starting point is GREEN
-            elif (grid[row][column] == 3):
+            elif (globalvars.grid[row][column] == 3):
                 color = RED
                 #Goal is RED
 
-            elif (grid[row][column] == 4):
+            elif (globalvars.grid[row][column] == 4):
                 color = LBLUE
                 #Path is LIGHT BLUE
             else:
@@ -113,12 +113,12 @@ while not done:
 
     # A* algorithm will go here
     goalState = False
-    if (len(openlist) != 0) and (goalState is False):
+    if (len(globalvars.openlist) != 0) and (goalState is False):
         repeatedForwardAstar()
     #elif goalState is True:
         # backtrack
 
-    elif len(openlist) == 0:
+    elif len(globalvars.openlist) == 0:
         print("Cannot find goal, path is blocked!")
         time.sleep(60)
         done = True
