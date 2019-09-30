@@ -1,6 +1,7 @@
 """
  @author:zain
 """
+from openList import *
 import random
 import pygame
 
@@ -10,6 +11,7 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
+LBLUE = (3, 232, 252)
 
 #setting height and width of cells
 BLOCK_WIDTH = 5
@@ -42,6 +44,11 @@ print(rand_goal_x,rand_goal_y)
 
 grid[rand_start_x][rand_start_y] = 2
 grid[rand_goal_x][rand_goal_y] = 3
+
+startCord = (rand_start_x,rand_start_y)
+goalCord =  (rand_goal_x,rand_goal_y)
+
+startNode = Treenode(0,None,startCord)
 
         #The zero/one here is appending a cell
 
