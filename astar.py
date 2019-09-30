@@ -1,9 +1,11 @@
 from openList import *
-from pygameBase import *
+#import pygameBase
+#from pygameBase import *
 
-# closedlist
+# closedlist and globals
 closedlist = []
-
+currentX = -1
+currentY = -1
 
 # finds g value of a node
 def findg(x, y):
@@ -39,73 +41,75 @@ def comparef(x, y, node):
 def repeatedForwardAstar():
 
     # if we find the goal state
-    goalfound = False
+    #goalfound = False
 
     # while the open list is not empty and the goal state is not found
-    while (len(openlist) != 0) and (goalfound == False):
+    #while (len(openlist) != 0) and (goalfound == False):
 
-        # pop from open list to expand first node
-        currentNode = pop()
+    # pop from open list to expand first node
+    currentNode = pop()
 
-        # get current x and y coords
-        x, y = currentNode.coordinates
+    # get current x and y coords
+    x, y = currentNode.coordinates
 
-        # up node, check bounds of x-1 and then if unblocked=0, blocked=1
-        if (x - 1) > -1:
-            if grid[x - 1][y] == 0:
-                upNode = Treenode(findf(x - 1,y), currentNode, (x - 1,y))
+    # up node, check bounds of x-1 and then if unblocked=0, blocked=1
+    if (x - 1) > -1:
+        if grid[x - 1][y] == 0:
+            upNode = Treenode(findf(x - 1,y), currentNode, (x - 1,y))
 
-                # add to open list if not in closed list OR openlist already
-                if (x - 1, y) not in closedlist.coordinates:
-                    if (x - 1, y) not in openlist.coordinates:
-                        insert(upNode)
-                    # compare f values and resiftup()
-                    else:
-                        comparef(x - 1, y, upNode)
+            # add to open list if not in closed list OR openlist already
+            if (x - 1, y) not in closedlist.coordinates:
+                if (x - 1, y) not in openlist.coordinates:
+                    insert(upNode)
+                # compare f values and resiftup()
+                else:
+                    comparef(x - 1, y, upNode)
 
-        # down node, check bounds of x+1 and then if unblocked=0, blocked=1
-        if (x + 1) < 101:
-            if grid[x + 1][y] == 0:
-                downNode = Treenode(findf(x + 1, y), currentNode, (x + 1, y))
+    # down node, check bounds of x+1 and then if unblocked=0, blocked=1
+    if (x + 1) < 101:
+        if grid[x + 1][y] == 0:
+            downNode = Treenode(findf(x + 1, y), currentNode, (x + 1, y))
 
-                # add to open list if not in closed list OR openlist already
-                if (x + 1, y) not in closedlist.coordinates:
-                    if (x + 1, y) not in openlist.coordinates:
-                        insert(downNode)
-                    # compare f values and resiftup()
-                    else:
-                        comparef(x + 1, y, downNode)
+            # add to open list if not in closed list OR openlist already
+            if (x + 1, y) not in closedlist.coordinates:
+                if (x + 1, y) not in openlist.coordinates:
+                    insert(downNode)
+                # compare f values and resiftup()
+                else:
+                    comparef(x + 1, y, downNode)
 
-        # right node, check bounds of y+1 and then if unblocked=0, blocked=1
-        if (y + 1) < 101:
-            if grid[x][y + 1] == 0:
-                rightNode = Treenode(findf(x, y + 1), currentNode, (x, y + 1))
+    # right node, check bounds of y+1 and then if unblocked=0, blocked=1
+    if (y + 1) < 101:
+        if grid[x][y + 1] == 0:
+            rightNode = Treenode(findf(x, y + 1), currentNode, (x, y + 1))
 
-                # add to open list if not in closed list OR openlist already
-                if (x, y + 1) not in closedlist.coordinates:
-                    if (x, y + 1) not in openlist.coordinates:
-                        insert(rightNode)
-                    # compare f values and resiftup()
-                    else:
-                        comparef(x, y + 1, rightNode)
+            # add to open list if not in closed list OR openlist already
+            if (x, y + 1) not in closedlist.coordinates:
+                if (x, y + 1) not in openlist.coordinates:
+                    insert(rightNode)
+                # compare f values and resiftup()
+                else:
+                    comparef(x, y + 1, rightNode)
 
-        # left node, check bounds of y-1 and then if unblocked=0, blocked=1
-        if (y - 1) > -1:
-            if grid[x][y - 1] == 0:
-                leftNode = Treenode(findf(x,y - 1), currentNode, (x,y - 1))
+    # left node, check bounds of y-1 and then if unblocked=0, blocked=1
+    if (y - 1) > -1:
+        if grid[x][y - 1] == 0:
+            leftNode = Treenode(findf(x,y - 1), currentNode, (x,y - 1))
 
-                # add to open list if not in closed list OR openlist already
-                if (x, y - 1) not in closedlist.coordinates:
-                    if (x, y - 1) not in openlist.coordinates:
-                        insert(leftNode)
-                    # compare f values and resiftup()
-                    else:
-                        comparef(x, y - 1, leftNode)
+            # add to open list if not in closed list OR openlist already
+            if (x, y - 1) not in closedlist.coordinates:
+                if (x, y - 1) not in openlist.coordinates:
+                    insert(leftNode)
+                # compare f values and resiftup()
+                else:
+                    comparef(x, y - 1, leftNode)
 
-        # add currnode to closed list and change color
-            closedlist.append(currentNode)
-            grid[x][y] = 4
-            # goal state check, have we found it???
-            if currentNode.coordinates == goalCord:
-                break
+    # add currnode to closed list and change color
+    closedlist.append(currentNode)
+    grid[x][y] = 4
+    currentX = x
+    currentY = y
+
+
+
 

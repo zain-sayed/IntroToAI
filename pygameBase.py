@@ -1,10 +1,11 @@
 """
  @author:zain
 """
-from openList import *
+#from openList import *
 from astar import *
 import random
 import pygame
+import time
 
 # Define some colors
 BLACK = (0, 0, 0)
@@ -51,6 +52,7 @@ goalCord =  (rand_goal_x,rand_goal_y)
 
 startNode = Treenode(0,None,startCord)
 
+
         #The zero/one here is appending a cell
 
 
@@ -83,6 +85,7 @@ while not done:
             column = pos[0]
             row = pos[1]
             print(pos)
+            done = True
 
 
     screen.fill(BLACK)
@@ -109,7 +112,17 @@ while not done:
 
 
     # A* algorithm will go here
-    repeatedForwardAstar()
+    goalState = False
+    if (len(openlist) != 0) and (goalState is False):
+        repeatedForwardAstar()
+    #elif goalState is True:
+        # backtrack
+
+    elif len(openlist) == 0:
+        print("Cannot find goal, path is blocked!")
+        time.sleep(60)
+        done = True
+
 
     # --- Game logic should go here
 

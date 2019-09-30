@@ -70,7 +70,9 @@ def pop():
         exit()
     # if size is 1, remove the first element
     if len(openlist) == 1:
-        return openlist.remove(0)
+        firstElement = openlist[0]
+        del openlist[-1]
+        return firstElement
     # now delete the root and replace it with the right most node, then siftdown
     todelete = openlist[0]
     last = len(openlist) - 1
