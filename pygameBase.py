@@ -95,20 +95,10 @@ while not done:
         done = True
 
 
-    # --- Game logic should go here
-
-    # --- Screen-clearing code goes here
-
-    # Here, we clear the screen to white. Don't put other drawing commands
-    # above this, or they will be erased with this command.
-
-    # If you want a background image, replace this clear with blit'ing the
-    # background image.
 
 
-    # --- Drawing code should go here
 
-    # --- Go ahead and update the screen with what we've drawn.
+   # --- Go ahead and update the screen with what we've drawn.
     #pygame.display.flip()
 
     # --- Limit to 60 frames per second
