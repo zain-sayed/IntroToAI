@@ -56,5 +56,5 @@ def gridColor(screen,grid):
 
             pygame.draw.rect(screen,color,[BLOCK_WIDTH*column,BLOCK_HEIGHT*row,BLOCK_WIDTH,BLOCK_HEIGHT])
 
+    # updating the screen
     pygame.display.flip()
-    #updating the screen

@@ -28,19 +28,18 @@ MARGIN = 0
 # start coords
 rand_start_x = random.randint(0, 100)
 rand_start_y = random.randint(0, 100)
-startCord = (rand_start_x, rand_start_y)
+startCoord = (rand_start_x, rand_start_y)
 
 # goal coords
 rand_goal_x = random.randint(0, 100)
 rand_goal_y = random.randint(0, 100)
-goalCord =  (rand_goal_x, rand_goal_y)
+goalCoord =  (rand_goal_x, rand_goal_y)
 
 
 #globalvars.grid = gridInit(startCord,goalCord)
 # initialize grid
-grid = gridInit(startCord,goalCord)
+grid = gridInit(startCoord, goalCoord)
 print(grid)
-startNode = Treenode(0, 0, 0, None, startCord)
 
 
         #The zero/one here is appending a cell
@@ -49,6 +48,12 @@ startNode = Treenode(0, 0, 0, None, startCord)
 
 pygame.init()
 
+
+repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time)
+
+
+
+'''
 # Set the width and height of the screen [width, height]
 size = (505, 505)
 screen = pygame.display.set_mode(size)
@@ -124,5 +129,7 @@ while not done:
     # --- Limit to 60 frames per second
     clock.tick(60)
 
+
+'''
 # Close the window and quit.
 pygame.quit()
