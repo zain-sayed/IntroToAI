@@ -8,7 +8,6 @@ from gridFunc import *
     return gx + gy
 '''
 
-
 # finds h value of a node
 def findh(x, y, goalX, goalY):
     hx = abs(goalX - x)
