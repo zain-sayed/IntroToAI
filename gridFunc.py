@@ -10,6 +10,7 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 LBLUE = (3, 232, 252)
+PINK = (252, 3, 148)
 
 BLOCK_WIDTH = 5
 BLOCK_HEIGHT = 5
@@ -50,6 +51,9 @@ def gridColor(screen,grid):
             elif (grid[row][column] == 4):
                 color = LBLUE
                 #Path is LIGHT BLUE
+            elif (grid[row][column] == 9):
+                color = PINK
+                #Shortest Path to Goal is Pink
             else:
                 color = BLACK
                 #blocked is black

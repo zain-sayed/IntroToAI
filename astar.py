@@ -42,6 +42,8 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
     clock = pygame.time.Clock()
 
     # separate the goal coords for manipulation
+    startX, startY = startCoord
+    print(str(startX) + "," + str(startY) + '\n')
     goalX, goalY = goalCoord
 
     # Initialize start node
@@ -195,13 +197,16 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
 
         # add current node to closed list and change color
         globalvars.closedlist.append(currentNode)
-        grid[x][y] = 4
+        if grid[x][y] == 2:
+            grid[x][y] = 2
+        else:
+            grid[x][y] = 4
 
         if x == goalX:
             if y == goalY:
                 print("in goal state")
                 print("Found Goal, exiting...")
-                goalState = True
+                goalfound = True
 
                 ###### backtrack here #########
 
@@ -210,11 +215,61 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
                 print("GOAL STATE IS TRUE")
                 print('\n')
                 print('\n')
-                time.sleep(60)
 
         # --- Limit to 60 frames per second
         clock.tick(60)
 
+    # if openlist is 0, then we cannot find the goal and have exhausted all our options
     if len(globalvars.openlist) == 0:
         print("Cannot find goal, path is blocked!")
         time.sleep(60)
+
+    # if we hit the goal, have to backtrack
+    elif goalfound is True:
+        ptr = globalvars.closedlist[-1]
+        currX, currY = ptr.coordinates
+        while (currX != startX) and (currY != startY):
+            # --- Main event loop
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    done = True
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos()
+                    column = pos[0]
+                    row = pos[1]
+                    print(pos)
+                    done = True
+
+            grid[currX][currY] = 9
+
+            # fill initial screen black
+            BLACK = (0, 0, 0)
+            screen.fill(BLACK)
+
+            # then, update grid colors
+            gridColor(screen, grid)
+
+            # --- Limit to 60 frames per second
+            clock.tick(60)
+
+            # increment ptr
+            ptr = ptr.parent
+            currX, currY = ptr.coordinates
+            print(ptr.f)
+            print('\n')
+            print(str(currX) + "," + str(currY) + '\n')
+
+    # now keep remaining screen up for 60 seconds
+    time.sleep(60)
+
+
+
+
+
+
+
+
+
+
+
+
