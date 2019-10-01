@@ -17,8 +17,8 @@ def findh(x, y):
 
 # finds f value of a node
 def findf(x, y, g):
-    #return g + findh(x, y)
-    return findh(x, y)
+    return g + findh(x, y)
+    #return findh(x, y)
 
 
 # compare f values on openlist conflict

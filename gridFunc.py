@@ -14,16 +14,24 @@ LBLUE = (3, 232, 252)
 BLOCK_WIDTH = 5
 BLOCK_HEIGHT = 5
 
-def gridInit():
+def gridInit(start,goal):
     grid = []
     for row in range(101):
+        grid.append([])
         for column in range(101):
             coinFlip = random.randint(0, 100)
             if (coinFlip > 24):
                 grid[row].append(0)
             else:
                 grid[row].append(1)
-        return grid
+    startx,starty = start
+    goalx,goaly = goal
+    grid[startx][starty] = 2
+    grid [goalx][goaly] = 3
+
+    return grid
+
+
 
 def gridColor(screen,grid):
     for row in range(101):

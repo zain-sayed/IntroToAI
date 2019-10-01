@@ -6,6 +6,7 @@ import pygame
 import time
 from astar import *
 from openList import *
+from gridFunc import *
 
 # Define some colors
 BLACK = (0, 0, 0)
@@ -21,35 +22,12 @@ BLOCK_HEIGHT = 5
 #Setting margin
 MARGIN = 0
 
-#grid = []
-grid_height = 101
-    #int(input("Input a grid height: "))
-grid_width = 101
-    #int(input("Input a grid width:  "))
-
-for row in range(grid_height):
-    globalvars.grid.append([])
-    for column in range(grid_width):
-        coinFlip = random.randint(0, 100)
-        if(coinFlip>24):
-            globalvars.grid[row].append(0)
-        else:
-            globalvars.grid[row].append(1)
-
-#rand_start_x = random.randint(0,100)
-#rand_start_y = random.randint(0,100)
-#rand_goal_x = random.randint(0,100)
-#rand_goal_y = random.randint(0,100)
-
-print(globalvars.rand_start_x,  globalvars.rand_start_y)
-print(globalvars.rand_goal_x,globalvars.rand_goal_y)
-
-globalvars.grid[globalvars.rand_start_x][globalvars.rand_start_y] = 2
-globalvars.grid[globalvars.rand_goal_x][globalvars.rand_goal_y] = 3
-
 startCord = (globalvars.rand_start_x,globalvars.rand_start_y)
 goalCord =  (globalvars.rand_goal_x,globalvars.rand_goal_y)
 
+
+globalvars.grid = gridInit(startCord,goalCord)
+print (globalvars.grid)
 startNode = Treenode(0, 0, 0, None, startCord)
 
 
@@ -62,8 +40,8 @@ pygame.init()
 # Set the width and height of the screen [width, height]
 size = (505, 505)
 screen = pygame.display.set_mode(size)
-
 pygame.display.set_caption("A* Grid")
+
 
 
 done = False
@@ -90,25 +68,11 @@ while not done:
 
     screen.fill(BLACK)
 
-    for row in range(grid_height):
-        for column in range(grid_width):
 
-            if (globalvars.grid[row][column] == 0):
-                color = WHITE
-            elif (globalvars.grid[row][column] == 2):
-                color = GREEN
-                #Starting point is GREEN
-            elif (globalvars.grid[row][column] == 3):
-                color = RED
-                #Goal is RED
 
-            elif (globalvars.grid[row][column] == 4):
-                color = LBLUE
-                #Path is LIGHT BLUE
-            else:
-                color = BLACK
 
-            pygame.draw.rect(screen,color,[BLOCK_WIDTH*column,BLOCK_HEIGHT*row,BLOCK_WIDTH,BLOCK_HEIGHT])
+    gridColor(screen,globalvars.grid)
+
 
 
     # A* algorithm will go here
@@ -145,7 +109,7 @@ while not done:
     # --- Drawing code should go here
 
     # --- Go ahead and update the screen with what we've drawn.
-    pygame.display.flip()
+    #pygame.display.flip()
 
     # --- Limit to 60 frames per second
     clock.tick(60)
