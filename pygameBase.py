@@ -22,12 +22,24 @@ BLOCK_HEIGHT = 5
 #Setting margin
 MARGIN = 0
 
-startCord = (globalvars.rand_start_x,globalvars.rand_start_y)
-goalCord =  (globalvars.rand_goal_x,globalvars.rand_goal_y)
+#startCord = (globalvars.rand_start_x, globalvars.rand_start_y)
+#goalCord =  (globalvars.rand_goal_x, globalvars.rand_goal_y)
+
+# start coords
+rand_start_x = random.randint(0, 100)
+rand_start_y = random.randint(0, 100)
+startCord = (rand_start_x, rand_start_y)
+
+# goal coords
+rand_goal_x = random.randint(0, 100)
+rand_goal_y = random.randint(0, 100)
+goalCord =  (rand_goal_x, rand_goal_y)
 
 
-globalvars.grid = gridInit(startCord,goalCord)
-print (globalvars.grid)
+#globalvars.grid = gridInit(startCord,goalCord)
+# initialize grid
+grid = gridInit(startCord,goalCord)
+print(grid)
 startNode = Treenode(0, 0, 0, None, startCord)
 
 
@@ -41,8 +53,6 @@ pygame.init()
 size = (505, 505)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("A* Grid")
-
-
 
 done = False
 clock = pygame.time.Clock()

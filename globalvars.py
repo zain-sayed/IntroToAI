@@ -8,7 +8,7 @@ openlist = []
 closedlist = []
 
 # grid
-grid = []
+#grid = []
 
 # start coords
 rand_start_x = random.randint(0, 100)
