@@ -263,14 +263,18 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
             print('\n')
             print(str(currX) + "," + str(currY) + '\n')
 
+        grid[startX][startY] =9
+        gridColor(screen,grid)
         print('Path Found')
+
         b = perf_counter()
         print(b-a)
         #time elapsed is printed
 
 
     # now keep remaining screen up for 60 seconds
-    time.sleep(60)
+    time.sleep(25)
+    #pygame.image.save(screen, "screenshot.jpg")
     pygame.display.quit()
 
 
