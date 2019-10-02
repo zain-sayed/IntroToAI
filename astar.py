@@ -228,7 +228,7 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
     elif goalfound is True:
         ptr = globalvars.closedlist[-1]
         currX, currY = ptr.coordinates
-        while (currX != startX) and (currY != startY):
+        while (ptr.coordinates != startCoord):
             # --- Main event loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -258,6 +258,8 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
             print(ptr.f)
             print('\n')
             print(str(currX) + "," + str(currY) + '\n')
+
+        print('Path Found')
 
     # now keep remaining screen up for 60 seconds
     time.sleep(60)
