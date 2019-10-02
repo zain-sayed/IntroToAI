@@ -1,5 +1,8 @@
 from openList import *
 from gridFunc import *
+from time import perf_counter
+
+
 
 # finds g value of a node
 '''def findg(x, y):
@@ -35,6 +38,7 @@ def comparef(x, y, node):
 # repeated forward A* algorithm
 def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
 
+    a = perf_counter()
     # Set the width and height of the screen [width, height], clock and display grid
     size = (505, 505)
     screen = pygame.display.set_mode(size)
@@ -260,9 +264,16 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
             print(str(currX) + "," + str(currY) + '\n')
 
         print('Path Found')
+        b = perf_counter()
+        print(b-a)
+        #time elapsed is printed
+
 
     # now keep remaining screen up for 60 seconds
     time.sleep(60)
+    pygame.display.quit()
+
+
 
 
 
