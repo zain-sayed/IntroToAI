@@ -34,6 +34,18 @@ def comparef(x, y, node):
                 i.g = node.g
                 siftup()
 
+def mainEventLoop(pygame):
+    # --- Main event loop
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            pos = pygame.mouse.get_pos()
+            column = pos[0]
+            row = pos[1]
+            print(pos)
+            done = True
+
 
 # repeated forward A* algorithm
 def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
@@ -47,7 +59,7 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
 
     # separate the goal coords for manipulation
     startX, startY = startCoord
-    print(str(startX) + "," + str(startY) + '\n')
+    print("start X is: " + str(startX) + "," + "start Y is : " + str(startY) + '\n')
     goalX, goalY = goalCoord
 
     # Initialize start node
@@ -65,16 +77,8 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
     # while the open list is not empty and the goal state is not found
     while (len(globalvars.openlist) != 0) and (goalfound is False) and (done is False):
 
-        # --- Main event loop
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                done = True
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                column = pos[0]
-                row = pos[1]
-                print(pos)
-                done = True
+        # helps display the loop
+        mainEventLoop(pygame)
 
         # fill initial screen black
         BLACK = (0, 0, 0)
@@ -208,18 +212,10 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
 
         if x == goalX:
             if y == goalY:
-                print("in goal state")
-                print("Found Goal, exiting...")
                 goalfound = True
-
-                ###### backtrack here #########
-
-                print('\n')
                 print('\n')
                 print("GOAL STATE IS TRUE")
                 print('\n')
-                print('\n')
-
         # --- Limit to 60 frames per second
         clock.tick(60)
 
@@ -232,18 +228,13 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
     elif goalfound is True:
         ptr = globalvars.closedlist[-1]
         currX, currY = ptr.coordinates
-        while (ptr.coordinates != startCoord):
-            # --- Main event loop
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    done = True
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    pos = pygame.mouse.get_pos()
-                    column = pos[0]
-                    row = pos[1]
-                    print(pos)
-                    done = True
 
+        ###### backtrack begins here #########
+        while (ptr.coordinates != startCoord):
+            # helps display the loop
+            mainEventLoop(pygame)
+
+            # make it PINK
             grid[currX][currY] = 9
 
             # fill initial screen black
@@ -259,12 +250,16 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
             # increment ptr
             ptr = ptr.parent
             currX, currY = ptr.coordinates
-            print(ptr.f)
-            print('\n')
-            print(str(currX) + "," + str(currY) + '\n')
 
-        grid[startX][startY] =9
-        gridColor(screen,grid)
+        # make the last point PINK
+        grid[startX][startY] = 9
+        # helps display the loop
+        mainEventLoop(pygame)
+        # fill initial screen black
+        BLACK = (0, 0, 0)
+        screen.fill(BLACK)
+        # now fill the final color
+        gridColor(screen, grid)
         print('Path Found')
 
         b = perf_counter()

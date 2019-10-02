@@ -34,7 +34,7 @@ goalCoord =  (rand_goal_x, rand_goal_y)
 
 # initialize grid
 grid = gridInit(startCoord, goalCoord)
-print(grid)
+#print(grid)
 
         #The zero/one here is appending a cell
 
