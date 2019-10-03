@@ -30,19 +30,23 @@ startCoord = (rand_start_x, rand_start_y)
 # goal coords
 rand_goal_x = random.randint(0, 100)
 rand_goal_y = random.randint(0, 100)
-goalCoord =  (rand_goal_x, rand_goal_y)
+goalCoord = (rand_goal_x, rand_goal_y)
 
 # initialize grid
 grid = gridInit(startCoord, goalCoord)
-#print(grid)
+grid2 = gridInit(startCoord, goalCoord)
+#grid2 = grid
 
         #The zero/one here is appending a cell
 
 # initialize the game (grid)
 pygame.init()
 
-# call the Astar algorithm
+# call the forward Astar algorithm
 repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time)
+
+# call the backward Astar algorithm
+repeatedBackwardAstar(pygame, grid2, goalCoord, startCoord, time)
 
 # Close the window and quit.
 pygame.quit()

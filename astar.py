@@ -230,7 +230,7 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
         currX, currY = ptr.coordinates
 
         ###### backtrack begins here #########
-        while (ptr.coordinates != startCoord):
+        while ptr.coordinates != startCoord:
             # helps display the loop
             mainEventLoop(pygame)
 
@@ -269,6 +269,235 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
 
     # now keep remaining screen up for 60 seconds
     time.sleep(25)
+    #pygame.image.save(screen, "screenshot.jpg")
+    globalvars.openlist = []
+    globalvars.closedlist = []
+    pygame.display.quit()
+
+
+
+# backward forward A* algorithm
+def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
+
+    a = perf_counter()
+    # Set the width and height of the screen [width, height], clock and display grid
+    size = (505, 505)
+    screen = pygame.display.set_mode(size)
+    pygame.display.set_caption("A* Grid")
+    clock = pygame.time.Clock()
+
+    # separate the goal coords for manipulation
+    startX, startY = startCoord
+    print("start X is: " + str(startX) + "," + "start Y is : " + str(startY) + '\n')
+    goalX, goalY = goalCoord
+
+    # Initialize start node
+    startNode = Treenode(0, 0, 0, None, startCoord)
+
+    # insert starting node into openlist
+    insert(startNode)
+
+    # if we find the goal state
+    goalfound = False
+
+    # if the screen has not been clicked
+    done = False
+
+    # while the open list is not empty and the goal state is not found
+    while (len(globalvars.openlist) != 0) and (goalfound is False) and (done is False):
+
+        # helps display the loop
+        mainEventLoop(pygame)
+
+        # fill initial screen black
+        BLACK = (0, 0, 0)
+        screen.fill(BLACK)
+
+        # then, update grid colors
+        gridColor(screen, grid)
+
+        # pop from open list to expand first node
+        currentNode = pop()
+
+        # get current x and y coords
+        x, y = currentNode.coordinates
+        if grid[x][y] == 2:
+            print("FOUND GOAL")
+
+        # up node, check bounds of x-1 and then if unblocked=0, blocked=1
+        if (x - 1) > -1:
+            # create the node
+            upNode = Treenode(findf(x - 1, y, currentNode.g + 1, goalX, goalY), currentNode.g + 1, findh(x - 1, y, goalX, goalY), currentNode, (x - 1, y))
+
+            if grid[x - 1][y] == 0:
+                # add to open list if not in closed list OR openlist already
+                inclosed = False
+                inopen = False
+                for element in globalvars.closedlist:
+                    if element.coordinates == (x - 1, y):
+                        inclosed = True
+                        break
+                if inclosed is False:
+                    for e in globalvars.openlist:
+                        if e.coordinates == (x - 1, y):
+                            inopen = True
+                            break
+                if inclosed is False:
+                    if inopen is False:
+                        insert(upNode)
+                    # compare f values and resiftup()
+                    else:
+                       comparef(x - 1, y, upNode)
+            elif grid[x - 1][y] == 2:
+                insert(upNode)
+
+        # down node, check bounds of x+1 and then if unblocked=0, blocked=1
+        if (x + 1) < 101:
+            # create the node
+            downNode = Treenode(findf(x + 1, y, currentNode.g + 1, goalX, goalY), currentNode.g + 1, findh(x + 1, y, goalX, goalY), currentNode, (x + 1, y))
+
+            if grid[x + 1][y] == 0:
+                # add to open list if not in closed list OR openlist already
+                inclosed = False
+                inopen = False
+                for element in globalvars.closedlist:
+                    if element.coordinates == (x + 1, y):
+                        inclosed = True
+                        break
+                if inclosed is False:
+                    for e in globalvars.openlist:
+                        if e.coordinates == (x + 1, y):
+                            inopen = True
+                            break
+                if inclosed is False:
+                    if inopen is False:
+                        insert(downNode)
+                    # compare f values and resiftup()
+                    else:
+                        comparef(x + 1, y, downNode)
+            elif grid[x + 1][y] == 2:
+                insert(downNode)
+
+        # right node, check bounds of y+1 and then if unblocked=0, blocked=1
+        if (y + 1) < 101:
+            # create the node
+            rightNode = Treenode(findf(x, y + 1, currentNode.g + 1, goalX, goalY), currentNode.g + 1, findh(x, y + 1, goalX, goalY), currentNode, (x, y + 1))
+
+            if grid[x][y + 1] == 0:
+                # add to open list if not in closed list OR openlist already
+                inclosed = False
+                inopen = False
+                for element in globalvars.closedlist:
+                    if element.coordinates == (x, y + 1):
+                        inclosed = True
+                        break
+                if inclosed is False:
+                    for e in globalvars.openlist:
+                        if e.coordinates == (x, y + 1):
+                            inopen = True
+                            break
+                if inclosed is False:
+                    if inopen is False:
+                        insert(rightNode)
+                    # compare f values and resiftup()
+                    else:
+                        comparef(x, y + 1, rightNode)
+            elif grid[x][y + 1] == 2:
+                insert(rightNode)
+
+        # left node, check bounds of y-1 and then if unblocked=0, blocked=1
+        if (y - 1) > -1:
+            # creates the node
+            leftNode = Treenode(findf(x, y - 1, currentNode.g + 1, goalX, goalY), currentNode.g + 1, findh(x, y - 1, goalX, goalY), currentNode, (x, y - 1))
+
+            if grid[x][y - 1] == 0:
+                # add to open list if not in closed list OR openlist already
+                inclosed = False
+                inopen = False
+                for element in globalvars.closedlist:
+                    if element.coordinates == (x, y - 1):
+                        inclosed = True
+                        break
+                if inclosed is False:
+                    for e in globalvars.openlist:
+                        if e.coordinates == (x, y - 1):
+                            inopen = True
+                            break
+                if inclosed is False:
+                    if inopen is False:
+                        insert(leftNode)
+                    # compare f values and resiftup()
+                    else:
+                        comparef(x, y - 1, leftNode)
+            elif grid[x][y - 1] == 2:
+                insert(leftNode)
+
+        # add current node to closed list and change color
+        globalvars.closedlist.append(currentNode)
+        if grid[x][y] == 3:
+            grid[x][y] = 3
+        else:
+            grid[x][y] = 4
+
+        if x == goalX:
+            if y == goalY:
+                goalfound = True
+                print('\n')
+                print("GOAL STATE IS TRUE")
+                print('\n')
+        # --- Limit to 60 frames per second
+        clock.tick(60)
+
+    # if openlist is 0, then we cannot find the goal and have exhausted all our options
+    if len(globalvars.openlist) == 0:
+        print("Cannot find goal, path is blocked!")
+        time.sleep(60)
+
+    # if we hit the goal, have to backtrack
+    elif goalfound is True:
+        ptr = globalvars.closedlist[-1]
+        currX, currY = ptr.coordinates
+
+        ###### backtrack begins here #########
+        while ptr.coordinates != startCoord:
+            # helps display the loop
+            mainEventLoop(pygame)
+
+            # make it PINK
+            grid[currX][currY] = 9
+
+            # fill initial screen black
+            BLACK = (0, 0, 0)
+            screen.fill(BLACK)
+
+            # then, update grid colors
+            gridColor(screen, grid)
+
+            # --- Limit to 60 frames per second
+            clock.tick(90)
+
+            # increment ptr
+            ptr = ptr.parent
+            currX, currY = ptr.coordinates
+
+        # make the last point PINK
+        grid[startX][startY] = 9
+        # helps display the loop
+        mainEventLoop(pygame)
+        # fill initial screen black
+        BLACK = (0, 0, 0)
+        screen.fill(BLACK)
+        # now fill the final color
+        gridColor(screen, grid)
+        print('Path Found')
+
+        b = perf_counter()
+        print(b-a)
+        #time elapsed is printed
+
+
+    # now keep remaining screen up for 60 seconds
+    time.sleep(5)
     #pygame.image.save(screen, "screenshot.jpg")
     pygame.display.quit()
 
