@@ -43,13 +43,13 @@ grid3 = gridInit(startCoord, goalCoord)
 pygame.init()
 
 # call the forward Astar algorithm
-#repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time)
+repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time)
 
 # call the backward Astar algorithm
-#repeatedBackwardAstar(pygame, grid2, goalCoord, startCoord, time)
+repeatedBackwardAstar(pygame, grid2, goalCoord, startCoord, time)
 
 # call the adaptive astar algorithm
-adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time)
+adaptive_repeatedForwardAstar(pygame, grid3, startCoord, goalCoord, time)
 
 # Close the window and quit.
 pygame.quit()

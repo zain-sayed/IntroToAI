@@ -511,6 +511,8 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
     # now keep remaining screen up for 60 seconds
     time.sleep(15)
     #pygame.image.save(screen, "screenshot.jpg")
+    globalvars.openlist = []
+    globalvars.closedlist = []
     pygame.display.quit()
 
 
