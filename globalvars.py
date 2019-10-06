@@ -5,3 +5,4 @@ openlist = []
 
 # closedlist and globals for currx and curry (printing purposes)
 closedlist = []
+

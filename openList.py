@@ -18,7 +18,8 @@ def siftup():
         p = (k-1) // 2
         current = globalvars.openlist[k]
         parent = globalvars.openlist[p]
-        '''
+
+        # g value check, take the smaller one
         if current.f == parent.f:
             if current.g < parent.g:
                 # swap the current and parent
@@ -27,7 +28,7 @@ def siftup():
                 globalvars.openlist[k] = temp
                 # move p to next level
                 k = p
-        '''
+
         # if the current is less than the parent, switch them as we bubble up
         if current.f < parent.f:
             # swap the current and parent

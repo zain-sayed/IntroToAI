@@ -2,15 +2,6 @@ from openList import *
 from gridFunc import *
 from time import perf_counter
 
-
-
-# finds g value of a node
-'''def findg(x, y):
-    gx = abs(globalvars.rand_start_x - x)
-    gy = abs(globalvars.rand_start_y - y)
-    return gx + gy
-'''
-
 # finds h value of a node
 def findh(x, y, goalX, goalY):
     hx = abs(goalX - x)
@@ -19,10 +10,10 @@ def findh(x, y, goalX, goalY):
 
 
 # finds h value of a node in Adaptive A*
-def findh_adaptive(x, y, g, goalX, goalY):
+def findh_adaptive(startX, startY, g, goalX, goalY):
     # take the g and the distance to the goal and subtract them
-    h = findh(x, y, goalX, goalY)
-    return h - g
+    gGoal = findh(startX, startY, goalX, goalY)
+    return gGoal - g
 
 
 # finds f value of a node
@@ -85,6 +76,10 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
 
     # if the screen has not been clicked
     done = False
+
+    # counter for how many nodes have been seen (not necessarily expanded)
+    count = 0
+    total_time = 0
 
     # while the open list is not empty and the goal state is not found
     while (len(globalvars.openlist) != 0) and (goalfound is False) and (done is False):
@@ -218,8 +213,10 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
         # add current node to closed list and change color
         globalvars.closedlist.append(currentNode)
         if grid[x][y] == 2:
+            count = count + 1
             grid[x][y] = 2
         else:
+            count = count + 1
             grid[x][y] = 4
 
         if x == goalX:
@@ -229,7 +226,7 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
                 print("GOAL STATE IS TRUE")
                 print('\n')
         # --- Limit to 60 frames per second
-        clock.tick(60)
+        clock.tick(120)
 
     # if openlist is 0, then we cannot find the goal and have exhausted all our options
     if len(globalvars.openlist) == 0:
@@ -257,7 +254,7 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
             gridColor(screen, grid)
 
             # --- Limit to 60 frames per second
-            clock.tick(60)
+            clock.tick(120)
 
             # increment ptr
             ptr = ptr.parent
@@ -275,7 +272,8 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
         print('Path Found')
 
         b = perf_counter()
-        print(b-a)
+        total_time = b - a
+        print(total_time)
         #time elapsed is printed
 
 
@@ -285,6 +283,7 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
     globalvars.openlist = []
     globalvars.closedlist = []
     pygame.display.quit()
+    return (count, total_time)
 
 
 
@@ -314,6 +313,10 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
 
     # if the screen has not been clicked
     done = False
+
+    # counter for how many nodes have been seen (not necessarily expanded)
+    count = 0
+    total_time = 0
 
     # while the open list is not empty and the goal state is not found
     while (len(globalvars.openlist) != 0) and (goalfound is False) and (done is False):
@@ -447,8 +450,10 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
         # add current node to closed list and change color
         globalvars.closedlist.append(currentNode)
         if grid[x][y] == 3:
+            count = count + 1
             grid[x][y] = 3
         else:
+            count = count + 1
             grid[x][y] = 4
 
         if x == goalX:
@@ -458,7 +463,7 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
                 print("GOAL STATE IS TRUE")
                 print('\n')
         # --- Limit to 60 frames per second
-        clock.tick(60)
+        clock.tick(120)
 
     # if openlist is 0, then we cannot find the goal and have exhausted all our options
     if len(globalvars.openlist) == 0:
@@ -486,7 +491,7 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
             gridColor(screen, grid)
 
             # --- Limit to 60 frames per second
-            clock.tick(90)
+            clock.tick(120)
 
             # increment ptr
             ptr = ptr.parent
@@ -504,7 +509,8 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
         print('Path Found')
 
         b = perf_counter()
-        print(b-a)
+        total_time = b-a
+        print(total_time)
         #time elapsed is printed
 
 
@@ -514,6 +520,7 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
     globalvars.openlist = []
     globalvars.closedlist = []
     pygame.display.quit()
+    return (count, total_time)
 
 
 
@@ -544,6 +551,10 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
     # if the screen has not been clicked
     done = False
 
+    # counter for how many nodes have been seen (not necessarily expanded)
+    count = 0
+    total_time = 0
+
     # while the open list is not empty and the goal state is not found
     while (len(globalvars.openlist) != 0) and (goalfound is False) and (done is False):
 
@@ -568,11 +579,12 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
         # up node, check bounds of x-1 and then if unblocked=0, blocked=1
         if (x - 1) > -1:
             # create the node
-            upNode = Treenode(findf(x - 1, y, currentNode.g + 1, goalX, goalY), currentNode.g + 1, findh_adaptive(x - 1, y, currentNode.g + 1, goalX, goalY), currentNode, (x - 1, y))
+            upNode = Treenode(findf(x - 1, y, currentNode.g + 1, goalX, goalY), currentNode.g + 1, findh_adaptive(startX, startY, currentNode.g + 1, goalX, goalY), currentNode, (x - 1, y))
 
             if grid[x - 1][y] == 0:
                 # add to open list if not in closed list OR openlist already
                 inclosed = False
+                #inclosed = any([element.coordinates == (x - 1, y) for element in globalvars.closedlist])
                 inopen = False
                 for element in globalvars.closedlist:
                     if element.coordinates == (x - 1, y):
@@ -595,7 +607,7 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
         # down node, check bounds of x+1 and then if unblocked=0, blocked=1
         if (x + 1) < 101:
             # create the node
-            downNode = Treenode(findf(x + 1, y, currentNode.g + 1, goalX, goalY), currentNode.g + 1, findh_adaptive(x + 1, y, currentNode.g + 1, goalX, goalY), currentNode, (x + 1, y))
+            downNode = Treenode(findf(x + 1, y, currentNode.g + 1, goalX, goalY), currentNode.g + 1, findh_adaptive(startX, startY, currentNode.g + 1, goalX, goalY), currentNode, (x + 1, y))
 
             if grid[x + 1][y] == 0:
                 # add to open list if not in closed list OR openlist already
@@ -622,7 +634,7 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
         # right node, check bounds of y+1 and then if unblocked=0, blocked=1
         if (y + 1) < 101:
             # create the node
-            rightNode = Treenode(findf(x, y + 1, currentNode.g + 1, goalX, goalY), currentNode.g + 1, findh_adaptive(x, y + 1, currentNode.g + 1, goalX, goalY), currentNode, (x, y + 1))
+            rightNode = Treenode(findf(x, y + 1, currentNode.g + 1, goalX, goalY), currentNode.g + 1, findh_adaptive(startX, startY, currentNode.g + 1, goalX, goalY), currentNode, (x, y + 1))
 
             if grid[x][y + 1] == 0:
                 # add to open list if not in closed list OR openlist already
@@ -649,7 +661,7 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
         # left node, check bounds of y-1 and then if unblocked=0, blocked=1
         if (y - 1) > -1:
             # creates the node
-            leftNode = Treenode(findf(x, y - 1, currentNode.g + 1, goalX, goalY), currentNode.g + 1, findh_adaptive(x, y - 1, currentNode.g + 1, goalX, goalY), currentNode, (x, y - 1))
+            leftNode = Treenode(findf(x, y - 1, currentNode.g + 1, goalX, goalY), currentNode.g + 1, findh_adaptive(startX, startY, currentNode.g + 1, goalX, goalY), currentNode, (x, y - 1))
 
             if grid[x][y - 1] == 0:
                 # add to open list if not in closed list OR openlist already
@@ -676,8 +688,10 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
         # add current node to closed list and change color
         globalvars.closedlist.append(currentNode)
         if grid[x][y] == 2:
+            count = count + 1
             grid[x][y] = 2
         else:
+            count = count + 1
             grid[x][y] = 4
 
         if x == goalX:
@@ -687,7 +701,7 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
                 print("GOAL STATE IS TRUE")
                 print('\n')
         # --- Limit to 60 frames per second
-        clock.tick(60)
+        clock.tick(120)
 
     # if openlist is 0, then we cannot find the goal and have exhausted all our options
     if len(globalvars.openlist) == 0:
@@ -715,7 +729,7 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
             gridColor(screen, grid)
 
             # --- Limit to 60 frames per second
-            clock.tick(60)
+            clock.tick(120)
 
             # increment ptr
             ptr = ptr.parent
@@ -733,7 +747,8 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
         print('Path Found')
 
         b = perf_counter()
-        print(b-a)
+        total_time = b - a
+        print(total_time)
         #time elapsed is printed
 
 
@@ -743,6 +758,7 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
     globalvars.openlist = []
     globalvars.closedlist = []
     pygame.display.quit()
+    return (count, total_time)
 
 
 

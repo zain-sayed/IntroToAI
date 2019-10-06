@@ -33,8 +33,11 @@ rand_goal_y = random.randint(0, 100)
 goalCoord = (rand_goal_x, rand_goal_y)
 
 # initialize grid
+random.seed(1)
 grid = gridInit(startCoord, goalCoord)
+random.seed(1)
 grid2 = gridInit(startCoord, goalCoord)
+random.seed(1)
 grid3 = gridInit(startCoord, goalCoord)
 
         #The zero/one here is appending a cell
