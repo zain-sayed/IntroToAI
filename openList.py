@@ -19,15 +19,15 @@ def siftup():
         current = globalvars.openlist[k]
         parent = globalvars.openlist[p]
 
-        # g value check, take the smaller one
-        if current.f == parent.f:
-            if current.g < parent.g:
-                # swap the current and parent
-                temp = globalvars.openlist[p]
-                globalvars.openlist[p] = globalvars.openlist[k]
-                globalvars.openlist[k] = temp
-                # move p to next level
-                k = p
+        # # g value check, take the smaller one
+        # if current.f == parent.f:
+        #     if current.g < parent.g:
+        #         # swap the current and parent
+        #         temp = globalvars.openlist[p]
+        #         globalvars.openlist[p] = globalvars.openlist[k]
+        #         globalvars.openlist[k] = temp
+        #         # move p to next level
+        #         k = p
 
         # if the current is less than the parent, switch them as we bubble up
         if current.f < parent.f:
@@ -103,16 +103,49 @@ def printList():
 '''
 def main():
     # insert 3 elements
-    n1 = Treenode(3, None, (0,0))
-    n2 = Treenode(5, None, (0,1))
-    n3 = Treenode(9, None, (0,2))
-    n4 = Treenode(6, None, (0, 0))
-    n5 = Treenode(8, None, (0, 1))
-    n6 = Treenode(20, None, (0, 2))
-    n7 = Treenode(10, None, (0, 0))
-    n8 = Treenode(12, None, (0, 1))
-    n9 = Treenode(18, None, (0, 2))
-    n10 = Treenode(9, None, (0, 2))
+    n1 = Treenode(41, 2, 2, None, (0,0))
+    n2 = Treenode(43, 3, 3, None, (0,1))
+    n3 = Treenode(43, 3, 4, None, (0,2))
+    n4 = Treenode(43, 2, 5, None, (0, 0))
+    n5 = Treenode(43, 3, 7,None, (0, 1))
+    n6 = Treenode(43, 7, 0, None, (0, 2))
+    n7 = Treenode(43, 8, 0, None, (0, 0))
+    n8 = Treenode(43, 0, 0, None, (0, 1))
+    n9 = Treenode(43, 0, 0, None, (0, 2))
+    n10 = Treenode(43, 0, 0, None, (0, 2))
+
+    # n11 = Treenode(43, 0, 0, None, (0, 0))
+    # n12 = Treenode(43, 0, 0, None, (0, 1))
+    #
+    # n13 = Treenode(41, 0, 0, None, (0, 2))
+    # n14 = Treenode(43, 0, 0, None, (0, 0))
+    # n15 = Treenode(43, 0, 0, None, (0, 1))
+    # n16 = Treenode(43, 0, 0, None, (0, 2))
+    # n17 = Treenode(43, 0, 0, None, (0, 0))
+    # n18 = Treenode(43, 0, 0, None, (0, 1))
+    #
+    # n19 = Treenode(41, 0, 0, None, (0, 2))
+    # n20 = Treenode(41, 0, 0, None, (0, 2))
+    n21 = Treenode(41, 0, 0, None, (0, 0))
+    #
+    n22 = Treenode(3, 0, 0, None, (0, 1))
+    n23 = Treenode(2, 0, 0, None, (0, 2))
+    n24 = Treenode(42, 0, 0, None, (0, 0))
+    n25 = Treenode(100, 0, 0, None, (0, 1))
+    # n26 = Treenode(43, 0, 0, None, (0, 2))
+    # n27 = Treenode(43, 0, 0, None, (0, 0))
+    # n28 = Treenode(43, 0, 0, None, (0, 1))
+    # n29 = Treenode(43, 0, 0, None, (0, 2))
+    # n30 = Treenode(43, 0, 0, None, (0, 2))
+    # n31 = Treenode(43, 0, 0, None, (0, 0))
+    # n32 = Treenode(43, 0, 0, None, (0, 1))
+    # n33 = Treenode(43, 0, 0, None, (0, 2))
+    # n34 = Treenode(43, 0, 0, None, (0, 0))
+    # n35 = Treenode(43, 0, 0, None, (0, 1))
+    # n36 = Treenode(43, 0, 0, None, (0, 2))
+
+
+
     insert(n1)
     insert(n2)
     insert(n3)
@@ -123,22 +156,97 @@ def main():
     insert(n8)
     insert(n9)
     insert(n10)
+    #
+    # insert(n11)
+    # insert(n12)
+    # insert(n13)
+    # insert(n14)
+    # insert(n15)
+    # insert(n16)
+    # insert(n17)
+    # insert(n18)
+    # insert(n19)
+    # insert(n20)
+    #insert(n21)
+    # insert(n22)
+    # insert(n23)
+    # insert(n24)
+    # insert(n25)
+    # insert(n26)
+    # insert(n27)
+    # insert(n28)
+    # insert(n29)
+    # insert(n30)
+    # insert(n31)
+    # insert(n32)
+    # insert(n33)
+    # insert(n34)
+    # insert(n35)
+    # insert(n36)
+
+
+
 
     printList()
     print('\n')
 
     # delete element
     deleted = pop()
-    deleted = pop()
-    deleted = pop()
     print ("deleted = " + str(deleted.f))
+    printList()
+
+    print('\n')
+    insert(n21)
+    printList()
+
+    print('\n')
+    # delete element
+    deleted = pop()
+    print("deleted = " + str(deleted.f))
+    printList()
+
+    print('\n')
+    insert(n22)
+    printList()
+
+    print('\n')
+    # delete element
+    deleted = pop()
+    print("deleted = " + str(deleted.f))
+    printList()
+
+    print('\n')
+    insert(n23)
+    printList()
+
+    print('\n')
+    # delete element
+    deleted = pop()
+    print("deleted = " + str(deleted.f))
+    printList()
+
+    print('\n')
+    insert(n24)
+    printList()
+
+    print('\n')
+    insert(n25)
+    printList()
+
+    print('\n')
+    # delete element
+    deleted = pop()
+    print("deleted = " + str(deleted.f))
+    printList()
+
+    print('\n')
+    # delete element
+    deleted = pop()
+    print("deleted = " + str(deleted.f))
     printList()
 
 
 if __name__ == '__main__':
     main()
 '''
-
-
-
 
