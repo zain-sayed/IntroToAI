@@ -28,7 +28,7 @@ def gridInit(start,goal):
     startx,starty = start
     goalx,goaly = goal
     grid[startx][starty] = 2
-    grid [goalx][goaly] = 3
+    grid[goalx][goaly] = 3
 
     return grid
 
