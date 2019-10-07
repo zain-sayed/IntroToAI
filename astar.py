@@ -8,6 +8,12 @@ def findh(x, y, goalX, goalY):
     hy = abs(goalY - y)
     return hx + hy
 
+def findh_backward(x, y, startX, startY):
+    # current node to start
+    hx = abs(startX - x)
+    hy = abs(startY - y)
+    return hx + hy
+
 
 # finds h value of a node in Adaptive A*
 def findh_adaptive(startX, startY, g, goalX, goalY):
@@ -19,6 +25,10 @@ def findh_adaptive(startX, startY, g, goalX, goalY):
 # finds f value of a node
 def findf(x, y, g, goalX, goalY):
     return g + findh(x, y, goalX, goalY)
+
+
+def findf_backward(x, y, g, startX, startY):
+    return g + findh_backward(x, y, startX, startY)
 
 
 # finds f value of a node in Adaptive A*
@@ -48,6 +58,21 @@ def mainEventLoop(pygame):
             row = pos[1]
             print(pos)
             done = True
+
+
+def check_blocked(x, y, currentNode, grid, blocked_list):
+    if (grid[x - 1][y] == 1) and (x - 1, y) not in blocked_list:
+        blocked_list.append((x - 1, y))
+        currentNode.g = 0
+    elif (grid[x + 1][y] == 1) and (x + 1, y) not in blocked_list:
+        blocked_list.append((x + 1, y))
+        currentNode.g = 0
+    elif (grid[x][y - 1] == 1) and (x, y - 1) not in blocked_list:
+        blocked_list.append((x, y - 1))
+        currentNode.g = 0
+    elif (grid[x][y + 1] == 1) and (x, y + 1) not in blocked_list:
+        blocked_list.append((x, y + 1))
+        currentNode.g = 0
 
 
 # repeated forward A* algorithm
@@ -80,6 +105,10 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
     # counter for how many nodes have been seen (not necessarily expanded)
     count = 0
     total_time = 0
+    shortest_path = 0
+
+    # initialize blocked list
+    blocked_list = []
 
     # while the open list is not empty and the goal state is not found
     while (len(globalvars.openlist) != 0) and (goalfound is False) and (done is False):
@@ -101,6 +130,9 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
         x, y = currentNode.coordinates
         if grid[x][y] == 3:
             print("FOUND GOAL")
+
+        # check to see if neighbors are blocked and not in blocked list already
+        check_blocked(x, y, currentNode, grid, blocked_list)
 
         # up node, check bounds of x-1 and then if unblocked=0, blocked=1
         if (x - 1) > -1:
@@ -126,6 +158,7 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
                     # compare f values and resiftup()
                     else:
                        comparef(x - 1, y, upNode)
+            # goal node
             elif grid[x - 1][y] == 3:
                 insert(upNode)
 
@@ -246,6 +279,9 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
             # make it PINK
             grid[currX][currY] = 9
 
+            # shortest path
+            shortest_path = shortest_path + 1
+
             # fill initial screen black
             BLACK = (0, 0, 0)
             screen.fill(BLACK)
@@ -262,6 +298,10 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
 
         # make the last point PINK
         grid[startX][startY] = 9
+
+        # shortest path
+        shortest_path = shortest_path + 1
+
         # helps display the loop
         mainEventLoop(pygame)
         # fill initial screen black
@@ -283,7 +323,7 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
     globalvars.openlist = []
     globalvars.closedlist = []
     pygame.display.quit()
-    return (count, total_time)
+    return (count, total_time, shortest_path)
 
 
 
@@ -317,6 +357,10 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
     # counter for how many nodes have been seen (not necessarily expanded)
     count = 0
     total_time = 0
+    shortest_path = 0
+
+    # blocked list
+    blocked_list = []
 
     # while the open list is not empty and the goal state is not found
     while (len(globalvars.openlist) != 0) and (goalfound is False) and (done is False):
@@ -338,6 +382,9 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
         x, y = currentNode.coordinates
         if grid[x][y] == 2:
             print("FOUND GOAL")
+
+        # check to see if neighbors are blocked and not in blocked list already
+        check_blocked(x, y, currentNode, grid, blocked_list)
 
         # up node, check bounds of x-1 and then if unblocked=0, blocked=1
         if (x - 1) > -1:
@@ -483,6 +530,9 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
             # make it PINK
             grid[currX][currY] = 9
 
+            # shortest path
+            shortest_path = shortest_path + 1
+
             # fill initial screen black
             BLACK = (0, 0, 0)
             screen.fill(BLACK)
@@ -499,6 +549,10 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
 
         # make the last point PINK
         grid[startX][startY] = 9
+
+        # shortest path
+        shortest_path = shortest_path + 1
+
         # helps display the loop
         mainEventLoop(pygame)
         # fill initial screen black
@@ -520,7 +574,7 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
     globalvars.openlist = []
     globalvars.closedlist = []
     pygame.display.quit()
-    return (count, total_time)
+    return (count, total_time, shortest_path)
 
 
 
@@ -554,6 +608,10 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
     # counter for how many nodes have been seen (not necessarily expanded)
     count = 0
     total_time = 0
+    shortest_path = 0
+
+    # blocked list
+    blocked_list = []
 
     # while the open list is not empty and the goal state is not found
     while (len(globalvars.openlist) != 0) and (goalfound is False) and (done is False):
@@ -575,6 +633,9 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
         x, y = currentNode.coordinates
         if grid[x][y] == 3:
             print("FOUND GOAL")
+
+        # check to see if neighbors are blocked and not in blocked list already
+        check_blocked(x, y, currentNode, grid, blocked_list)
 
         # up node, check bounds of x-1 and then if unblocked=0, blocked=1
         if (x - 1) > -1:
@@ -721,6 +782,9 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
             # make it PINK
             grid[currX][currY] = 9
 
+            # shortest path
+            shortest_path = shortest_path + 1
+
             # fill initial screen black
             BLACK = (0, 0, 0)
             screen.fill(BLACK)
@@ -737,6 +801,10 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
 
         # make the last point PINK
         grid[startX][startY] = 9
+
+        # shortest path
+        shortest_path = shortest_path + 1
+
         # helps display the loop
         mainEventLoop(pygame)
         # fill initial screen black
@@ -758,7 +826,7 @@ def adaptive_repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
     globalvars.openlist = []
     globalvars.closedlist = []
     pygame.display.quit()
-    return (count, total_time)
+    return (count, total_time, shortest_path)
 
 
 
