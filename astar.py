@@ -8,11 +8,12 @@ def findh(x, y, goalX, goalY):
     hy = abs(goalY - y)
     return hx + hy
 
-def findh_backward(x, y, startX, startY):
-    # current node to start
-    hx = abs(startX - x)
-    hy = abs(startY - y)
-    return hx + hy
+
+# def findh_backward(x, y, startX, startY):
+#     # current node to start
+#     hx = abs(startX - x)
+#     hy = abs(startY - y)
+#     return hx + hy
 
 
 # finds h value of a node in Adaptive A*
@@ -323,6 +324,7 @@ def repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time):
     globalvars.openlist = []
     globalvars.closedlist = []
     pygame.display.quit()
+    print("shortest path is (forward): " + str(shortest_path))
     return (count, total_time, shortest_path)
 
 
@@ -574,6 +576,7 @@ def repeatedBackwardAstar(pygame, grid, startCoord, goalCoord, time):
     globalvars.openlist = []
     globalvars.closedlist = []
     pygame.display.quit()
+    print ("shortest path is (backward): " + str(shortest_path))
     return (count, total_time, shortest_path)
 
 
