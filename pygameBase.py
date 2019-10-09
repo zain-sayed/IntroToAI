@@ -35,9 +35,9 @@ goalCoord = (rand_goal_x, rand_goal_y)
 
 # initialize grid
 random.seed(1)
-grid = grid_init(startCoord, goalCoord)
+forward_grid = grid_init(startCoord, goalCoord)
 random.seed(1)
-grid_astar = grid_init_white(startCoord, goalCoord)
+astar_grid = grid_init_white(startCoord, goalCoord)
 
 # grid2 = gridInit(startCoord, goalCoord)
 # random.seed(1)
@@ -48,10 +48,9 @@ grid_astar = grid_init_white(startCoord, goalCoord)
 # initialize the game (grid)
 pygame.init()
 
-
-
 # call the forward Astar algorithm
-#repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time)
+repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time)
+
 
 # call the backward Astar algorithm
 #repeatedBackwardAstar(pygame, grid2, goalCoord, startCoord, time)

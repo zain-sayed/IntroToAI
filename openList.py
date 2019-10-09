@@ -91,7 +91,7 @@ def pop(openlist):
     last = len(openlist) - 1
     openlist[0] = openlist[last]
     del openlist[-1]
-    siftdown(openlist)
+    openlist = siftdown(openlist)
     return todelete, openlist
 
 # print the openlist
