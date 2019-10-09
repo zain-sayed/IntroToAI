@@ -15,7 +15,8 @@ PINK = (252, 3, 148)
 BLOCK_WIDTH = 5
 BLOCK_HEIGHT = 5
 
-def gridInit(start,goal):
+
+def grid_init(start, goal):
     grid = []
     for row in range(101):
         grid.append([])
@@ -29,12 +30,24 @@ def gridInit(start,goal):
     goalx,goaly = goal
     grid[startx][starty] = 2
     grid[goalx][goaly] = 3
-
     return grid
 
 
+def grid_init_white(start, goal):
+    grid = []
+    for row in range(101):
+        grid.append([])
+        for column in range(101):
+            grid[row].append(0)
+    # now set start coords
+    startx,starty = start
+    goalx,goaly = goal
+    grid[startx][starty] = 2
+    grid[goalx][goaly] = 3
+    return grid
 
-def gridColor(screen,grid):
+
+def gridColor(screen, grid):
     for row in range(101):
         for column in range(101):
 

@@ -4,6 +4,7 @@
 import random
 import pygame
 import time
+#from astarold import *
 from astar import *
 from openList import *
 from gridFunc import *
@@ -34,22 +35,26 @@ goalCoord = (rand_goal_x, rand_goal_y)
 
 # initialize grid
 random.seed(1)
-grid = gridInit(startCoord, goalCoord)
+grid = grid_init(startCoord, goalCoord)
 random.seed(1)
-grid2 = gridInit(startCoord, goalCoord)
-random.seed(1)
-grid3 = gridInit(startCoord, goalCoord)
+grid_astar = grid_init_white(startCoord, goalCoord)
+
+# grid2 = gridInit(startCoord, goalCoord)
+# random.seed(1)
+# grid3 = gridInit(startCoord, goalCoord)
 
         #The zero/one here is appending a cell
 
 # initialize the game (grid)
 pygame.init()
 
+
+
 # call the forward Astar algorithm
-repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time)
+#repeatedForwardAstar(pygame, grid, startCoord, goalCoord, time)
 
 # call the backward Astar algorithm
-repeatedBackwardAstar(pygame, grid2, goalCoord, startCoord, time)
+#repeatedBackwardAstar(pygame, grid2, goalCoord, startCoord, time)
 
 # call the adaptive astar algorithm
 #adaptive_repeatedForwardAstar(pygame, grid3, startCoord, goalCoord, time)

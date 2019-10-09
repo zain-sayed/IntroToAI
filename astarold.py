@@ -39,7 +39,7 @@ def comparef(x, y, node, openlist):
                 i.f = node.f
                 i.parent = node.parent
                 i.g = node.g
-                siftup()
+                siftup(openlist)
 
 def mainEventLoop(pygame):
     # --- Main event loop
