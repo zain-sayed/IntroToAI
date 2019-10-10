@@ -324,7 +324,7 @@ def follow_path(pygame, pathlist, forward_grid, time, clock, screen):
             path.append((x, y))
 
             # display moving ... Screen things first
-            forward_grid[x][y] = 4
+            #forward_grid[x][y] = 4
             mainEventLoop(pygame)
             screen.fill(BLACK)
             # then, update grid colors and --- Limit to 60 frames per second
@@ -383,17 +383,21 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
         # look around to all points near the current node
         #print("current x is : " + str(currentX))
         #print("current y is : " + str(currentY))
-        if (forward_grid[currentX - 1][currentY] == 1):
-            astar_grid[currentX - 1][currentY] = 1
+        if (currentX - 1) > -1:
+           if forward_grid[currentX - 1][currentY] == 1:
+                astar_grid[currentX - 1][currentY] = 1
 
-        elif forward_grid[currentX + 1][currentY] == 1:
-            astar_grid[currentX + 1][currentY] = 1
+        if (currentX + 1) < 101:
+            if forward_grid[currentX + 1][currentY] == 1:
+                astar_grid[currentX + 1][currentY] = 1
 
-        elif forward_grid[currentX][currentY - 1] == 1:
-            astar_grid[currentX][currentY - 1] = 1
+        if (currentY - 1) > -1:
+            if forward_grid[currentX][currentY - 1] == 1:
+                astar_grid[currentX][currentY - 1] = 1
 
-        elif forward_grid[currentX][currentY + 1] == 1:
-            astar_grid[currentX][currentY + 1] = 1
+        if (currentY + 1) < 101:
+            if forward_grid[currentX][currentY + 1] == 1:
+                astar_grid[currentX][currentY + 1] = 1
 
         # now call astar
         current_path_of_coordinates = astar(pygame, astar_grid, (currentX, currentY), goalCoord, time, clock, screen)
