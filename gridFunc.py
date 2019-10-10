@@ -22,7 +22,7 @@ def grid_init(start, goal):
         grid.append([])
         for column in range(101):
             coinFlip = random.randint(0, 100)
-            if (coinFlip > 10):
+            if (coinFlip > 29):
                 grid[row].append(0)
             else:
                 grid[row].append(1)

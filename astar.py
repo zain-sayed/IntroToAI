@@ -156,6 +156,14 @@ def check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
                     comparef(x, y - 1, leftNode, openlist)
         elif grid[x][y - 1] == 3:
             openlist = insert(leftNode, openlist)
+
+    #printList(openlist)
+    #print('\n')
+    # print(grid[x - 1][y])
+    # print(grid[x + 1][y])
+    # print(grid[x][y + 1])
+    # print(grid[x][y - 1])
+
     return openlist
 
 
@@ -170,7 +178,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
     closedlist = []
 
     # create the caption
-    pygame.display.set_caption("A* Grid")
+    #pygame.display.set_caption("A* Grid")
     a = perf_counter()
 
     # total time and shortest path
@@ -189,6 +197,9 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
 
     # insert starting node into openlist
     openlist = insert(startNode, openlist)
+    printList(openlist)
+    c, o = openlist[0].coordinates
+    print("the openlist coords are: " + str(c) + "," + str(o))
 
     # loop through the open list
     while (len(openlist) != 0) and (goalfound is False):
@@ -218,7 +229,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
             grid[x][y] = 2
         else:
             count = count + 1
-            grid[x][y] = 4
+            #grid[x][y] = 4
         # if we hit the goal
         if (x == goalX) and (y == goalY):
             goalfound = True
@@ -228,7 +239,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
 
         # if openlist is 0, then we cannot find the goal and have exhausted all our options
         if len(openlist) == 0:
-            print("Cannot find goal, path is blocked!")
+            print("In Astar and cannot find goal, path is blocked!")
             time.sleep(60)
             path_of_coordinates = []
             return path_of_coordinates
@@ -242,7 +253,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
             while ptr.coordinates != startCoord:
 
                 # Screen things first: helps display the loop, make the node at ptr pink
-                grid[currX][currY] = 9
+                # grid[currX][currY] = 9
                 # mainEventLoop(pygame)
                 # screen.fill(BLACK)
                 # # then, update grid colors and --- Limit to 60 frames per second
@@ -261,7 +272,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
             path_of_coordinates.append(ptr.coordinates)
 
             # make the last point PINK (do all the grid/screen operations 1 last time)
-            grid[startX][startY] = 9
+            # grid[startX][startY] = 9
             # mainEventLoop(pygame)
             # screen.fill(BLACK)
             # gridColor(screen, grid)
@@ -273,7 +284,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
             print("The Total Time Elapsed is: " + str(total_time))
 
     # now keep remaining screen up for 60 seconds
-    time.sleep(15)
+    # time.sleep(15)
     # pygame.display.quit()
     print("shortest path is (forward): " + str(shortest_path))
     path_of_coordinates.reverse()
@@ -313,8 +324,8 @@ def follow_path(pygame, pathlist, forward_grid, time, clock, screen):
             path.append((x, y))
 
             # display moving ... Screen things first
+            forward_grid[x][y] = 4
             mainEventLoop(pygame)
-            forward_grid[x][y] = 9
             screen.fill(BLACK)
             # then, update grid colors and --- Limit to 60 frames per second
             gridColor(screen, forward_grid)
@@ -327,7 +338,6 @@ def follow_path(pygame, pathlist, forward_grid, time, clock, screen):
 
             # display moving ... Screen things first
             mainEventLoop(pygame)
-            forward_grid[x][y] = 9
             screen.fill(BLACK)
             # then, update grid colors and --- Limit to 60 frames per second
             gridColor(screen, forward_grid)
@@ -340,8 +350,8 @@ def follow_path(pygame, pathlist, forward_grid, time, clock, screen):
             path.append((x, y))
 
             # display moving ... Screen things first
+            #forward_grid[x][y] = 9
             mainEventLoop(pygame)
-            forward_grid[x][y] = 9
             screen.fill(BLACK)
             # then, update grid colors and --- Limit to 60 frames per second
             gridColor(screen, forward_grid)
@@ -371,6 +381,8 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
     # loop until the curr is the goal
     while currentStart != goalCoord:
         # look around to all points near the current node
+        print("current x is : " + str(currentX))
+        print("current y is : " + str(currentY))
         if (forward_grid[currentX - 1][currentY] == 1):
             astar_grid[currentX - 1][currentY] = 1
 
@@ -388,7 +400,7 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
 
         # if we cannot find the path
         if current_path_of_coordinates is []:
-            print("The path is blocked and cannot be found")
+            print("The current_path_of_coordinates is empty and thus the path is blocked and cannot be found")
             break
 
         # now follow the path laid by astar in follow_path
@@ -425,15 +437,19 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
                 gridColor(screen, forward_grid)
                 clock.tick(120)
 
-            # this keeps track of the total time elapsed
-            b = perf_counter()
-            total_time = b - a
-            print("The Total Time Elapsed is: " + str(total_time))
-
         else:
             # then we found a new blocked node and update the astar grid with the new blocked coords
             blockedX, blockedY = blockedCoords
             astar_grid[blockedX][blockedY] = 1
+            print("Blocked x :" + str(blockedX))
+            print("Blocked Y :" + str(blockedY))
+
+    # this keeps track of the total time elapsed
+    b = perf_counter()
+    total_time = b - a
+    print("The Total Time Elapsed is: " + str(total_time))
+    time.sleep(30)
+    pygame.display.quit()
 
 
 '''
