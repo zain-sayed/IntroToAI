@@ -36,6 +36,7 @@ goalCoord = (rand_goal_x, rand_goal_y)
 # initialize grid
 random.seed(1)
 forward_grid = grid_init(startCoord, goalCoord)
+#forward_grid = grid_init_white(startCoord, goalCoord)
 random.seed(1)
 astar_grid = grid_init_white(startCoord, goalCoord)
 

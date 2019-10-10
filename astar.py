@@ -68,7 +68,7 @@ def check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
                    openlist = insert(upNode, openlist)
                 # compare f values and resiftup()
                 else:
-                    comparef(x - 1, y, upNode)
+                    comparef(x - 1, y, upNode, openlist)
         # goal node
         elif grid[x - 1][y] == 3:
            openlist = insert(upNode, openlist)
@@ -97,7 +97,7 @@ def check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
                     openlist = insert(downNode, openlist)
                 # compare f values and resiftup()
                 else:
-                    comparef(x + 1, y, downNode)
+                    comparef(x + 1, y, downNode, openlist)
         elif grid[x + 1][y] == 3:
             openlist = insert(downNode, openlist)
 
@@ -125,7 +125,7 @@ def check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
                     openlist = insert(rightNode, openlist)
                 # compare f values and resiftup()
                 else:
-                    comparef(x, y + 1, rightNode)
+                    comparef(x, y + 1, rightNode, openlist)
         elif grid[x][y + 1] == 3:
             openlist = insert(rightNode, openlist)
 
@@ -153,7 +153,7 @@ def check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
                     openlist = insert(leftNode, openlist)
                 # compare f values and resiftup()
                 else:
-                    comparef(x, y - 1, leftNode)
+                    comparef(x, y - 1, leftNode, openlist)
         elif grid[x][y - 1] == 3:
             openlist = insert(leftNode, openlist)
     return openlist
@@ -175,6 +175,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
 
     # total time and shortest path
     shortest_path = 0
+    count = 0
 
     # separate the goal coords for manipulation
     startX, startY = startCoord
@@ -192,12 +193,13 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
     # loop through the open list
     while (len(openlist) != 0) and (goalfound is False):
         # helps display the loop, fill initial screen black and update grid colors
-        mainEventLoop(pygame)
-        screen.fill(BLACK)
-        gridColor(screen, grid)
+        # mainEventLoop(pygame)
+        # screen.fill(BLACK)
+        # gridColor(screen, grid)
 
         # assigns current node to the removed node and openlist to the modified openlist
-        currentNode, openlist = pop(openlist)
+        temp = pop(openlist)
+        currentNode, openlist = temp
         #listToDecouple = pop(openlist)
         #currentNode, openlist = listToDecouple
 
@@ -240,12 +242,12 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
             while ptr.coordinates != startCoord:
 
                 # Screen things first: helps display the loop, make the node at ptr pink
-                mainEventLoop(pygame)
                 grid[currX][currY] = 9
-                screen.fill(BLACK)
-                # then, update grid colors and --- Limit to 60 frames per second
-                gridColor(screen, grid)
-                clock.tick(120)
+                # mainEventLoop(pygame)
+                # screen.fill(BLACK)
+                # # then, update grid colors and --- Limit to 60 frames per second
+                # gridColor(screen, grid)
+                # clock.tick(120)
 
                 # now append the coords of the current node to the path_of_coordinates list
                 path_of_coordinates.append(ptr.coordinates)
@@ -260,26 +262,26 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
 
             # make the last point PINK (do all the grid/screen operations 1 last time)
             grid[startX][startY] = 9
-            mainEventLoop(pygame)
-            screen.fill(BLACK)
-            gridColor(screen, grid)
+            # mainEventLoop(pygame)
+            # screen.fill(BLACK)
+            # gridColor(screen, grid)
             print('Path Found' + '\n')
 
             # this keeps track of the total time elapsed
             b = perf_counter()
             total_time = b - a
-            print("The Total Time Elapsed is: " + total_time)
+            print("The Total Time Elapsed is: " + str(total_time))
 
     # now keep remaining screen up for 60 seconds
     time.sleep(15)
-    pygame.display.quit()
+    # pygame.display.quit()
     print("shortest path is (forward): " + str(shortest_path))
     path_of_coordinates.reverse()
     return path_of_coordinates
 
 
 # follows the path given by astar
-def follow_path(pathlist, forward_grid, clock, screen):
+def follow_path(pygame, pathlist, forward_grid, time, clock, screen):
     # decouple the start coords
     i = 0
     x, y = pathlist[i]
@@ -390,7 +392,8 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
             break
 
         # now follow the path laid by astar in follow_path
-        blockedCoords, currentStart, to_be_added = follow_path(current_path_of_coordinates, forward_grid, (currentX, currentY), time, clock, screen)
+        #blockedCoords, currentStart, to_be_added = follow_path(current_path_of_coordinates, forward_grid, (currentX, currentY), time, clock, screen)
+        blockedCoords, currentStart, to_be_added = follow_path(pygame, current_path_of_coordinates, forward_grid, time, clock, screen)
         # increment currentX, currentY
         currentX, currentY = currentStart
 
@@ -411,6 +414,7 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
             for coordinate in totalpath:
                 # decouple the coordinates
                 totalX, totalY = coordinate
+                print(coordinate)
 
                 # make the coord blue, then display it
                 forward_grid[totalX][totalY] = 9
@@ -421,10 +425,10 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
                 gridColor(screen, forward_grid)
                 clock.tick(120)
 
-                # this keeps track of the total time elapsed
-                b = perf_counter()
-                total_time = b - a
-                print("The Total Time Elapsed is: " + total_time)
+            # this keeps track of the total time elapsed
+            b = perf_counter()
+            total_time = b - a
+            print("The Total Time Elapsed is: " + str(total_time))
 
         else:
             # then we found a new blocked node and update the astar grid with the new blocked coords

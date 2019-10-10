@@ -19,15 +19,15 @@ def siftup(openlist):
         current = openlist[k]
         parent = openlist[p]
 
-        # # g value check, take the smaller one
-        # if current.f == parent.f:
-        #     if current.g < parent.g:
-        #         # swap the current and parent
-        #         temp = openlist[p]
-        #         openlist[p] = openlist[k]
-        #         openlist[k] = temp
-        #         # move p to next level
-        #         k = p
+        # g value check, take the smaller one
+        if current.f == parent.f:
+            if current.g < parent.g:
+                # swap the current and parent
+                temp = openlist[p]
+                openlist[p] = openlist[k]
+                openlist[k] = temp
+                # move p to next level
+                k = p
 
         # if the current is less than the parent, switch them as we bubble up
         if current.f < parent.f:
@@ -85,7 +85,7 @@ def pop(openlist):
     if len(openlist) == 1:
         firstElement = openlist[0]
         del openlist[-1]
-        return firstElement
+        return firstElement, openlist
     # now delete the root and replace it with the right most node, then siftdown
     todelete = openlist[0]
     last = len(openlist) - 1
@@ -93,6 +93,7 @@ def pop(openlist):
     del openlist[-1]
     openlist = siftdown(openlist)
     return todelete, openlist
+
 
 # print the openlist
 def printList(openlist):
@@ -102,6 +103,7 @@ def printList(openlist):
         node = openlist[i]
         print(node.f)
         i = i + 1
+
 
 '''
 def main():
