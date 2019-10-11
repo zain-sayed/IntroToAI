@@ -176,6 +176,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
     # create the openlist and the closedlists
     openlist = []
     closedlist = []
+    path_of_coordinates = []
 
     # create the caption
     #pygame.display.set_caption("A* Grid")
@@ -188,8 +189,8 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
     # separate the goal coords for manipulation
     startX, startY = startCoord
     goalX, goalY = goalCoord
-    print("start X is: " + str(startX) + "," + "start Y is : " + str(startY) + '\n')
-    print("goal X is: " + str(goalX) + "," + "goal Y is : " + str(goalY) + '\n')
+    #print("start X is: " + str(startX) + "," + "start Y is : " + str(startY) + '\n')
+    #print("goal X is: " + str(goalX) + "," + "goal Y is : " + str(goalY) + '\n')
 
     # Initialize start node and if we find the goal state
     startNode = Treenode(0, 0, 0, None, startCoord)
@@ -197,9 +198,9 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
 
     # insert starting node into openlist
     openlist = insert(startNode, openlist)
-    printList(openlist)
+    #printList(openlist)
     c, o = openlist[0].coordinates
-    print("the openlist coords are: " + str(c) + "," + str(o))
+    #print("the openlist coords are: " + str(c) + "," + str(o))
 
     # loop through the open list
     while (len(openlist) != 0) and (goalfound is False):
@@ -216,8 +217,8 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
 
         # get current x and y coords
         x, y = currentNode.coordinates
-        if grid[x][y] == 3:
-            print("FOUND GOAL")
+        #if grid[x][y] == 3:
+            #print('\n' + "Found GOAL" + '\n')
 
         # now check the 4 different directions and add to open list if needed (update if there, skip if blocked)
         openlist = check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY)
@@ -233,9 +234,9 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
         # if we hit the goal
         if (x == goalX) and (y == goalY):
             goalfound = True
-            print('\n' + "Found GOAL" + '\n')
+            # print('\n' + "Found GOAL" + '\n')
         # --- Limit to 60 frames per second
-        clock.tick(120)
+        #clock.tick(120)
 
         # if openlist is 0, then we cannot find the goal and have exhausted all our options
         if len(openlist) == 0:
@@ -245,7 +246,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
             return path_of_coordinates
         # else, we found the goal and we need to backtrack and return the list of coords
         elif goalfound is True:
-            path_of_coordinates = []
+            # path_of_coordinates = []
             ptr = closedlist[-1]
             currX, currY = ptr.coordinates
 
@@ -276,17 +277,17 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
             # mainEventLoop(pygame)
             # screen.fill(BLACK)
             # gridColor(screen, grid)
-            print('Path Found' + '\n')
+            #print('Path Found' + '\n')
 
             # this keeps track of the total time elapsed
             b = perf_counter()
             total_time = b - a
-            print("The Total Time Elapsed is: " + str(total_time))
+            #print("The Total Time Elapsed is: " + str(total_time))
 
     # now keep remaining screen up for 60 seconds
     # time.sleep(15)
     # pygame.display.quit()
-    print("shortest path is (forward): " + str(shortest_path))
+    #print("shortest path is (forward): " + str(shortest_path))
     path_of_coordinates.reverse()
     return path_of_coordinates
 
@@ -381,8 +382,8 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
     # loop until the curr is the goal
     while currentStart != goalCoord:
         # look around to all points near the current node
-        print("current x is : " + str(currentX))
-        print("current y is : " + str(currentY))
+        #print("current x is : " + str(currentX))
+        #print("current y is : " + str(currentY))
         if (forward_grid[currentX - 1][currentY] == 1):
             astar_grid[currentX - 1][currentY] = 1
 
@@ -426,7 +427,7 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
             for coordinate in totalpath:
                 # decouple the coordinates
                 totalX, totalY = coordinate
-                print(coordinate)
+                #print(coordinate)
 
                 # make the coord blue, then display it
                 forward_grid[totalX][totalY] = 9
@@ -441,8 +442,8 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
             # then we found a new blocked node and update the astar grid with the new blocked coords
             blockedX, blockedY = blockedCoords
             astar_grid[blockedX][blockedY] = 1
-            print("Blocked x :" + str(blockedX))
-            print("Blocked Y :" + str(blockedY))
+            #print("Blocked x :" + str(blockedX))
+            #print("Blocked Y :" + str(blockedY))
 
     # this keeps track of the total time elapsed
     b = perf_counter()
