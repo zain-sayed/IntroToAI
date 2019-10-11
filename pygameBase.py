@@ -40,9 +40,22 @@ forward_grid = grid_init(startCoord, goalCoord)
 random.seed(1)
 astar_grid = grid_init_white(startCoord, goalCoord)
 
-# grid2 = gridInit(startCoord, goalCoord)
-# random.seed(1)
-# grid3 = gridInit(startCoord, goalCoord)
+
+# initialize grid for backward
+random.seed(1)
+backward_grid = grid_init(startCoord, goalCoord)
+#forward_grid = grid_init_white(startCoord, goalCoord)
+random.seed(1)
+backward_astar_grid = grid_init_white(startCoord, goalCoord)
+
+
+# initialize grid for adaptive
+random.seed(1)
+adaptive_grid = grid_init(startCoord, goalCoord)
+#forward_grid = grid_init_white(startCoord, goalCoord)
+random.seed(1)
+adaptive_astar_grid = grid_init_white(startCoord, goalCoord)
+
 
         #The zero/one here is appending a cell
 
@@ -50,14 +63,13 @@ astar_grid = grid_init_white(startCoord, goalCoord)
 pygame.init()
 
 # call the forward Astar algorithm
-repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time)
-
+repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time, 3)
 
 # call the backward Astar algorithm
-#repeatedBackwardAstar(pygame, grid2, goalCoord, startCoord, time)
+repeated_astar(pygame, backward_grid, backward_astar_grid, startCoord, goalCoord, time, 2)
 
-# call the adaptive astar algorithm
-#adaptive_repeatedForwardAstar(pygame, grid3, startCoord, goalCoord, time)
+# call adaptive Astar algorithm
+adaptive_astar(pygame, adaptive_grid, adaptive_astar_grid, startCoord, goalCoord, time, 8)
 
 # Close the window and quit.
 pygame.quit()

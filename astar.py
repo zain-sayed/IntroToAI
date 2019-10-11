@@ -5,11 +5,24 @@ from time import perf_counter
 # global color, black
 BLACK = (0, 0, 0)
 
+# global list of prior closed lists
+adaptivelist = []
+
 # finds h value of a node
 def findh(x, y, goalX, goalY):
     hx = abs(goalX - x)
     hy = abs(goalY - y)
     return hx + hy
+
+
+# find h adaptive
+def findh_adaptive(goalG, prevG):
+    return abs(goalG - prevG)
+
+
+# find f adaptive
+def findf_adapt(g, goalG, prevG):
+    return g + findh_adaptive(goalG, prevG)
 
 
 # finds f value of a node
@@ -72,6 +85,9 @@ def check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
         # goal node
         elif grid[x - 1][y] == 3:
            openlist = insert(upNode, openlist)
+        # start node
+        elif grid[x - 1][y] == 2:
+           openlist = insert(upNode, openlist)
 
     # down node, check bounds of x+1 and then if unblocked=0, blocked=1
     if (x + 1) < 101:
@@ -99,6 +115,8 @@ def check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
                 else:
                     comparef(x + 1, y, downNode, openlist)
         elif grid[x + 1][y] == 3:
+            openlist = insert(downNode, openlist)
+        elif grid[x + 1][y] == 2:
             openlist = insert(downNode, openlist)
 
     # right node, check bounds of y+1 and then if unblocked=0, blocked=1
@@ -128,6 +146,8 @@ def check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
                     comparef(x, y + 1, rightNode, openlist)
         elif grid[x][y + 1] == 3:
             openlist = insert(rightNode, openlist)
+        elif grid[x][y + 1] == 2:
+            openlist = insert(rightNode, openlist)
 
     # left node, check bounds of y-1 and then if unblocked=0, blocked=1
     if (y - 1) > -1:
@@ -156,15 +176,221 @@ def check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
                     comparef(x, y - 1, leftNode, openlist)
         elif grid[x][y - 1] == 3:
             openlist = insert(leftNode, openlist)
-
-    #printList(openlist)
-    #print('\n')
-    # print(grid[x - 1][y])
-    # print(grid[x + 1][y])
-    # print(grid[x][y + 1])
-    # print(grid[x][y - 1])
+        elif grid[x][y - 1] == 2:
+            openlist = insert(leftNode, openlist)
 
     return openlist
+
+
+# function checks the 4 directions on the grid and inserts if needed
+def check_nodes_adaptive(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
+    # declare vars
+    g = currentNode.g + 1
+    prevG = 0
+    goalG = 0
+    h = 0
+    f = 0
+    isFound = False
+    # prevG = if (x,y) in closedlist, assign that g
+    # goalG = if (x,y) in closed list, assign that g
+
+    if (x - 1) > -1:
+        # create the node
+        for item in adaptivelist:
+            # goal node
+            if item.coordinates == (goalX, goalY):
+                goalG = item.g
+                break
+        for item in adaptivelist:
+            # prev node
+            if item.coordinates == (x - 1, y):
+                prevG = item.g
+                h = findh_adaptive(goalG, prevG)
+                f = findf_adapt(g, goalG, prevG)
+                isFound = True
+                break
+        # the item is not in the closed adaptivelist
+        if isFound is False:
+            h = findh(x-1, y, goalX, goalY)
+            f = findf(x-1, y, g, goalX, goalY)
+
+        # up node, check bounds of x-1 and then if unblocked=0, blocked=1
+        upNode = Treenode(f, g, h, currentNode, (x - 1, y))
+
+        if grid[x - 1][y] == 0:
+            # add to open list if not in closed list OR openlist already
+            inclosed = False
+            inopen = False
+            for element in closedlist:
+                if element.coordinates == (x - 1, y):
+                    inclosed = True
+                    break
+            if inclosed is False:
+                for e in openlist:
+                    if e.coordinates == (x - 1, y):
+                        inopen = True
+                        break
+            if inclosed is False:
+                if inopen is False:
+                   openlist = insert(upNode, openlist)
+                # compare f values and resiftup()
+                else:
+                    comparef(x - 1, y, upNode, openlist)
+        # goal node
+        elif grid[x - 1][y] == 3:
+           openlist = insert(upNode, openlist)
+        # start node
+        elif grid[x - 1][y] == 2:
+           openlist = insert(upNode, openlist)
+
+    # down node, check bounds of x+1 and then if unblocked=0, blocked=1
+    if (x + 1) < 101:
+        # create the node
+        for item in adaptivelist:
+            # goal node
+            if item.coordinates == (goalX, goalY):
+                goalG = item.g
+                break
+        for item in adaptivelist:
+            # prev node
+            if item.coordinates == (x + 1, y):
+                prevG = item.g
+                h = findh_adaptive(goalG, prevG)
+                f = findf_adapt(g, goalG, prevG)
+                isFound = True
+                break
+        # the item is not in the closed adaptivelist
+        if isFound is False:
+            h = findh(x + 1, y, goalX, goalY)
+            f = findf(x + 1, y, g, goalX, goalY)
+
+        # create the node
+        downNode = Treenode(f, g, h, currentNode, (x + 1, y))
+
+        if grid[x + 1][y] == 0:
+            # add to open list if not in closed list OR openlist already
+            inclosed = False
+            inopen = False
+            for element in closedlist:
+                if element.coordinates == (x + 1, y):
+                    inclosed = True
+                    break
+            if inclosed is False:
+                for e in openlist:
+                    if e.coordinates == (x + 1, y):
+                        inopen = True
+                        break
+            if inclosed is False:
+                if inopen is False:
+                    openlist = insert(downNode, openlist)
+                # compare f values and resiftup()
+                else:
+                    comparef(x + 1, y, downNode, openlist)
+        elif grid[x + 1][y] == 3:
+            openlist = insert(downNode, openlist)
+        elif grid[x + 1][y] == 2:
+            openlist = insert(downNode, openlist)
+
+    # right node, check bounds of y+1 and then if unblocked=0, blocked=1
+    if (y + 1) < 101:
+        # create the node
+        for item in adaptivelist:
+            # goal node
+            if item.coordinates == (goalX, goalY):
+                goalG = item.g
+                break
+        for item in adaptivelist:
+            # prev node
+            if item.coordinates == (x, y+1):
+                prevG = item.g
+                h = findh_adaptive(goalG, prevG)
+                f = findf_adapt(g, goalG, prevG)
+                isFound = True
+                break
+        # the item is not in the closed adaptivelist
+        if isFound is False:
+            h = findh(x, y+1, goalX, goalY)
+            f = findf(x, y+1, g, goalX, goalY)
+
+        # create the node
+        rightNode = Treenode(f, g, h, currentNode, (x, y + 1))
+
+        if grid[x][y + 1] == 0:
+            # add to open list if not in closed list OR openlist already
+            inclosed = False
+            inopen = False
+            for element in closedlist:
+                if element.coordinates == (x, y + 1):
+                    inclosed = True
+                    break
+            if inclosed is False:
+                for e in openlist:
+                    if e.coordinates == (x, y + 1):
+                        inopen = True
+                        break
+            if inclosed is False:
+                if inopen is False:
+                    openlist = insert(rightNode, openlist)
+                # compare f values and resiftup()
+                else:
+                    comparef(x, y + 1, rightNode, openlist)
+        elif grid[x][y + 1] == 3:
+            openlist = insert(rightNode, openlist)
+        elif grid[x][y + 1] == 2:
+            openlist = insert(rightNode, openlist)
+
+    # left node, check bounds of y-1 and then if unblocked=0, blocked=1
+    if (y - 1) > -1:
+        # create the node
+        for item in adaptivelist:
+            # goal node
+            if item.coordinates == (goalX, goalY):
+                goalG = item.g
+                break
+        for item in adaptivelist:
+            # prev node
+            if item.coordinates == (x, y-1):
+                prevG = item.g
+                h = findh_adaptive(goalG, prevG)
+                f = findf_adapt(g, goalG, prevG)
+                isFound = True
+                break
+        # the item is not in the closed adaptivelist
+        if isFound is False:
+            h = findh(x, y-1, goalX, goalY)
+            f = findf(x, y-1, g, goalX, goalY)
+
+
+        # creates the node
+        leftNode = Treenode(f, g, h, currentNode, (x, y - 1))
+
+        if grid[x][y - 1] == 0:
+            # add to open list if not in closed list OR openlist already
+            inclosed = False
+            inopen = False
+            for element in closedlist:
+                if element.coordinates == (x, y - 1):
+                    inclosed = True
+                    break
+            if inclosed is False:
+                for e in openlist:
+                    if e.coordinates == (x, y - 1):
+                        inopen = True
+                        break
+            if inclosed is False:
+                if inopen is False:
+                    openlist = insert(leftNode, openlist)
+                # compare f values and resiftup()
+                else:
+                    comparef(x, y - 1, leftNode, openlist)
+        elif grid[x][y - 1] == 3:
+            openlist = insert(leftNode, openlist)
+        elif grid[x][y - 1] == 2:
+            openlist = insert(leftNode, openlist)
+
+    return openlist
+
+
 
 
 # This will compute the current path by running Astar on the known world and will return
@@ -172,15 +398,11 @@ def check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
 #
 # The goalCoord remains constant, but the startCoord must begin from the last blocked node from the
 # previous call, which's coordinates will be passed in to this new call of astar as the startCoord
-def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
+def astar(pygame, grid, startCoord, goalCoord, time, clock, screen, goalType):
     # create the openlist and the closedlists
     openlist = []
     closedlist = []
     path_of_coordinates = []
-
-    # create the caption
-    #pygame.display.set_caption("A* Grid")
-    a = perf_counter()
 
     # total time and shortest path
     shortest_path = 0
@@ -189,8 +411,6 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
     # separate the goal coords for manipulation
     startX, startY = startCoord
     goalX, goalY = goalCoord
-    #print("start X is: " + str(startX) + "," + "start Y is : " + str(startY) + '\n')
-    #print("goal X is: " + str(goalX) + "," + "goal Y is : " + str(goalY) + '\n')
 
     # Initialize start node and if we find the goal state
     startNode = Treenode(0, 0, 0, None, startCoord)
@@ -198,30 +418,22 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
 
     # insert starting node into openlist
     openlist = insert(startNode, openlist)
-    #printList(openlist)
     c, o = openlist[0].coordinates
-    #print("the openlist coords are: " + str(c) + "," + str(o))
 
     # loop through the open list
     while (len(openlist) != 0) and (goalfound is False):
-        # helps display the loop, fill initial screen black and update grid colors
-        # mainEventLoop(pygame)
-        # screen.fill(BLACK)
-        # gridColor(screen, grid)
-
         # assigns current node to the removed node and openlist to the modified openlist
         temp = pop(openlist)
         currentNode, openlist = temp
-        #listToDecouple = pop(openlist)
-        #currentNode, openlist = listToDecouple
 
         # get current x and y coords
         x, y = currentNode.coordinates
-        #if grid[x][y] == 3:
-            #print('\n' + "Found GOAL" + '\n')
 
         # now check the 4 different directions and add to open list if needed (update if there, skip if blocked)
-        openlist = check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY)
+        if goalType == 8:
+            openlist = check_nodes_adaptive(grid, openlist, closedlist, currentNode, x, y, goalX, goalY)
+        else:
+            openlist = check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY)
 
         # add current node to closed list and change color
         closedlist.append(currentNode)
@@ -230,13 +442,9 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
             grid[x][y] = 2
         else:
             count = count + 1
-            #grid[x][y] = 4
         # if we hit the goal
         if (x == goalX) and (y == goalY):
             goalfound = True
-            # print('\n' + "Found GOAL" + '\n')
-        # --- Limit to 60 frames per second
-        #clock.tick(120)
 
         # if openlist is 0, then we cannot find the goal and have exhausted all our options
         if len(openlist) == 0:
@@ -246,24 +454,13 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
             return path_of_coordinates
         # else, we found the goal and we need to backtrack and return the list of coords
         elif goalfound is True:
-            # path_of_coordinates = []
             ptr = closedlist[-1]
             currX, currY = ptr.coordinates
 
             ###### backtrack begins here #########
             while ptr.coordinates != startCoord:
-
-                # Screen things first: helps display the loop, make the node at ptr pink
-                # grid[currX][currY] = 9
-                # mainEventLoop(pygame)
-                # screen.fill(BLACK)
-                # # then, update grid colors and --- Limit to 60 frames per second
-                # gridColor(screen, grid)
-                # clock.tick(120)
-
                 # now append the coords of the current node to the path_of_coordinates list
                 path_of_coordinates.append(ptr.coordinates)
-
                 # increment ptr
                 ptr = ptr.parent
                 currX, currY = ptr.coordinates
@@ -272,24 +469,19 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen):
             # now append the coords of the current node to the path_of_coordinates list
             path_of_coordinates.append(ptr.coordinates)
 
-            # make the last point PINK (do all the grid/screen operations 1 last time)
-            # grid[startX][startY] = 9
-            # mainEventLoop(pygame)
-            # screen.fill(BLACK)
-            # gridColor(screen, grid)
-            #print('Path Found' + '\n')
-
-            # this keeps track of the total time elapsed
-            b = perf_counter()
-            total_time = b - a
-            #print("The Total Time Elapsed is: " + str(total_time))
-
     # now keep remaining screen up for 60 seconds
-    # time.sleep(15)
-    # pygame.display.quit()
-    #print("shortest path is (forward): " + str(shortest_path))
-    path_of_coordinates.reverse()
-    return path_of_coordinates
+    # forward
+    if goalType == 3:
+        path_of_coordinates.reverse()
+        return path_of_coordinates
+    # backward
+    elif goalType == 2:
+        return path_of_coordinates
+    # adaptive
+    elif goalType == 8:
+        adaptivelist = closedlist
+        path_of_coordinates.reverse()
+        return path_of_coordinates
 
 
 # follows the path given by astar
@@ -344,19 +536,31 @@ def follow_path(pygame, pathlist, forward_grid, time, clock, screen):
             gridColor(screen, forward_grid)
             clock.tick(120)
 
-        elif forward_grid[x][y] == 3: # goal state
+        elif forward_grid[x][y] == 3:  # goal state
             goalfound = True
             currentX = x
             currentY = y
             path.append((x, y))
 
             # display moving ... Screen things first
-            #forward_grid[x][y] = 9
             mainEventLoop(pygame)
             screen.fill(BLACK)
             # then, update grid colors and --- Limit to 60 frames per second
             gridColor(screen, forward_grid)
             clock.tick(120)
+        # elif goalType == 2:
+        #     if forward_grid[x][y] == 2:  # goal state
+        #         goalfound = True
+        #         currentX = x
+        #         currentY = y
+        #         path.append((x, y))
+        #
+        #         # display moving ... Screen things first
+        #         mainEventLoop(pygame)
+        #         screen.fill(BLACK)
+        #         # then, update grid colors and --- Limit to 60 frames per second
+        #         gridColor(screen, forward_grid)
+        #         clock.tick(120)
 
         # increment counter
         i += 1
@@ -365,7 +569,7 @@ def follow_path(pygame, pathlist, forward_grid, time, clock, screen):
 
 
 # repeated forward A* algorithm
-def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time):
+def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time, goalType):
     # Set the width and height of the screen [width, height], clock and display grid (and counter for time elapsed)
     size = (505, 505)
     screen = pygame.display.set_mode(size)
@@ -382,8 +586,6 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
     # loop until the curr is the goal
     while currentStart != goalCoord:
         # look around to all points near the current node
-        #print("current x is : " + str(currentX))
-        #print("current y is : " + str(currentY))
         if (forward_grid[currentX - 1][currentY] == 1):
             astar_grid[currentX - 1][currentY] = 1
 
@@ -397,7 +599,13 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
             astar_grid[currentX][currentY + 1] = 1
 
         # now call astar
-        current_path_of_coordinates = astar(pygame, astar_grid, (currentX, currentY), goalCoord, time, clock, screen)
+        # forward
+        if goalType == 3:
+            current_path_of_coordinates = astar(pygame, astar_grid, (currentX, currentY), goalCoord, time, clock, screen, goalType)
+        # backward
+        elif goalType == 2:
+            current_path_of_coordinates = astar(pygame, astar_grid, goalCoord, (currentX, currentY), time, clock, screen, goalType)
+
 
         # if we cannot find the path
         if current_path_of_coordinates is []:
@@ -405,7 +613,6 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
             break
 
         # now follow the path laid by astar in follow_path
-        #blockedCoords, currentStart, to_be_added = follow_path(current_path_of_coordinates, forward_grid, (currentX, currentY), time, clock, screen)
         blockedCoords, currentStart, to_be_added = follow_path(pygame, current_path_of_coordinates, forward_grid, time, clock, screen)
         # increment currentX, currentY
         currentX, currentY = currentStart
@@ -427,7 +634,6 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
             for coordinate in totalpath:
                 # decouple the coordinates
                 totalX, totalY = coordinate
-                #print(coordinate)
 
                 # make the coord blue, then display it
                 forward_grid[totalX][totalY] = 9
@@ -437,46 +643,97 @@ def repeated_forward_astar(pygame, forward_grid, astar_grid, startCoord, goalCoo
                 # then, update grid colors and --- Limit to 60 frames per second
                 gridColor(screen, forward_grid)
                 clock.tick(120)
-
         else:
             # then we found a new blocked node and update the astar grid with the new blocked coords
             blockedX, blockedY = blockedCoords
             astar_grid[blockedX][blockedY] = 1
-            #print("Blocked x :" + str(blockedX))
-            #print("Blocked Y :" + str(blockedY))
 
     # this keeps track of the total time elapsed
     b = perf_counter()
     total_time = b - a
     print("The Total Time Elapsed is: " + str(total_time))
-    time.sleep(30)
+    time.sleep(5)
     pygame.display.quit()
 
 
-'''
-    plan:
+# adaptive A* algorithm
+def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time, goalType):
+    # Set the width and height of the screen [width, height], clock and display grid (and counter for time elapsed)
+    size = (505, 505)
+    screen = pygame.display.set_mode(size)
+    pygame.display.set_caption("Repeated Forward A* Grid")
+    clock = pygame.time.Clock()
+    a = perf_counter()
 
-    so we want to run astar be the
-    start coord
-    goal coord
-    current start coord
+    # node for current start coordinate
+    currentStart = startCoord
+    currentX, currentY = currentStart
+    to_be_added = []
+    totalpath = []
 
-    while current start coord != goal coord
+    # loop until the curr is the goal
+    while currentStart != goalCoord:
+        # look around to all points near the current node
+        if (forward_grid[currentX - 1][currentY] == 1):
+            astar_grid[currentX - 1][currentY] = 1
 
-        look around at all possible points, if there is a blocked node, mark it on the 
-        astar_grid 
+        elif forward_grid[currentX + 1][currentY] == 1:
+            astar_grid[currentX + 1][currentY] = 1
 
-        call astar with the astar_grid and the current start coord and goal coord
+        elif forward_grid[currentX][currentY - 1] == 1:
+            astar_grid[currentX][currentY - 1] = 1
 
-        then call follow path...
-        take the path from that and apply it to the current grid
-        when we hit a blocked node --> return the blocked node's coord,  
-        the current coord where we were stopped 
+        elif forward_grid[currentX][currentY + 1] == 1:
+            astar_grid[currentX][currentY + 1] = 1
 
-        current start coord = current coord ^ from above 
-        if current node where we stopped has reached goal state, return that path 
+        # now call astar
+        current_path_of_coordinates = astar(pygame, astar_grid, (currentX, currentY), goalCoord, time, clock, screen, goalType)
 
-        else 
-            Now, update the astar_grid with the latest blocked node
+        # if we cannot find the path
+        if current_path_of_coordinates is []:
+            print("The current_path_of_coordinates is empty and thus the path is blocked and cannot be found")
+            break
 
-'''
+        # now follow the path laid by astar in follow_path
+        blockedCoords, currentStart, to_be_added = follow_path(pygame, current_path_of_coordinates, forward_grid, time, clock, screen)
+        # increment currentX, currentY
+        currentX, currentY = currentStart
+
+        # add the elements from to_be_added to our final list
+        for element in to_be_added:
+            totalpath.append(element)
+
+        # if we found the goal state
+        if currentStart == goalCoord:
+            print("Found goal in forward A!")
+
+            # display full path
+            # helps display the loop, fill initial screen black and update grid colors
+            mainEventLoop(pygame)
+            screen.fill(BLACK)
+            gridColor(screen, forward_grid)
+            # itterate through totalpath and show that on the grid
+            for coordinate in totalpath:
+                # decouple the coordinates
+                totalX, totalY = coordinate
+
+                # make the coord blue, then display it
+                forward_grid[totalX][totalY] = 9
+                # Screen things first: helps display the loop, make the node at ptr pink
+                mainEventLoop(pygame)
+                screen.fill(BLACK)
+                # then, update grid colors and --- Limit to 60 frames per second
+                gridColor(screen, forward_grid)
+                clock.tick(120)
+        else:
+            # then we found a new blocked node and update the astar grid with the new blocked coords
+            blockedX, blockedY = blockedCoords
+            astar_grid[blockedX][blockedY] = 1
+
+    # this keeps track of the total time elapsed
+    b = perf_counter()
+    total_time = b - a
+    print("The Total Time Elapsed is: " + str(total_time))
+    time.sleep(5)
+    pygame.display.quit()
+
