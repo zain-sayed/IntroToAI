@@ -37,7 +37,6 @@ goalCoord = (rand_goal_x, rand_goal_y)
 random.seed(1)
 forward_grid = grid_init(startCoord, goalCoord)
 #forward_grid = grid_init_white(startCoord, goalCoord)
-random.seed(1)
 astar_grid = grid_init_white(startCoord, goalCoord)
 
 
@@ -45,7 +44,6 @@ astar_grid = grid_init_white(startCoord, goalCoord)
 random.seed(1)
 backward_grid = grid_init(startCoord, goalCoord)
 #forward_grid = grid_init_white(startCoord, goalCoord)
-random.seed(1)
 backward_astar_grid = grid_init_white(startCoord, goalCoord)
 
 
@@ -53,7 +51,6 @@ backward_astar_grid = grid_init_white(startCoord, goalCoord)
 random.seed(1)
 adaptive_grid = grid_init(startCoord, goalCoord)
 #forward_grid = grid_init_white(startCoord, goalCoord)
-random.seed(1)
 adaptive_astar_grid = grid_init_white(startCoord, goalCoord)
 
 

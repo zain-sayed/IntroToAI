@@ -1,5 +1,7 @@
 #import globalvars
 
+SMALLER = False
+
 class Treenode:
     # initialize values
     def __init__(self, f, g, h, parent, coordinates):
@@ -8,6 +10,14 @@ class Treenode:
         self.h = h
         self.parent = parent
         self.coordinates = coordinates
+
+    def smaller_than(self, other_tn, smaller_g = True):
+        if self.f < other_tn.f:
+            return True
+        if self.f == other_tn.f and ((smaller_g and self.g < other_tn.g) or ((not smaller_g) and self.g > other_tn.g)):
+            return True
+        return False
+
 
 
 ###################################### have to do an equal g value condition  ######################################  
@@ -19,6 +29,7 @@ def siftup(openlist):
         current = openlist[k]
         parent = openlist[p]
 
+        """
         # g value check, take the smaller one
         if current.f == parent.f:
             if current.g < parent.g:
@@ -37,6 +48,12 @@ def siftup(openlist):
             openlist[k] = temp
             # move p to next level
             k = p
+        """
+        ####
+        if current.smaller_than(parent, smaller_g = SMALLER):
+            openlist[p], openlist[k] = openlist[k], openlist[p]
+            k = p
+        ####
         else:
             break
     return openlist
@@ -53,10 +70,16 @@ def siftdown(openlist):
 
         # if the right is less than the total size, check if the right is less than the left
         if right < len(openlist):
-            if openlist[right].f < openlist[left].f:
+            # if openlist[right].f < openlist[left].f:
+            ####
+            if openlist[right].smaller_than(openlist[left], smaller_g = SMALLER):
+            ####
                 min = right
         # if the k is greater than the min, grab the
-        if openlist[k].f > openlist[min].f:
+        # if openlist[k].f > openlist[min].f:
+        ####
+        if openlist[min].smaller_than(openlist[k], smaller_g = SMALLER):
+        ####
             temp = openlist[k]
             openlist[k] = openlist[min]
             openlist[min] = temp

@@ -499,7 +499,7 @@ def follow_path(pygame, pathlist, forward_grid, time, clock, screen):
     goalfound = False
     blocked = False
 
-    # itterate through the pathlist until the goal ist found or the path is blocked
+    # iterate through the pathlist until the goal ist found or the path is blocked
     while (goalfound is False) and (blocked is False):
         # helps display the loop, fill initial screen black and update grid colors
         mainEventLoop(pygame)
@@ -573,7 +573,11 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
     # Set the width and height of the screen [width, height], clock and display grid (and counter for time elapsed)
     size = (505, 505)
     screen = pygame.display.set_mode(size)
-    pygame.display.set_caption("Repeated Forward A* Grid")
+    if goalType == 3:
+        pygame.display.set_caption("Repeated Forward A* Grid")
+    else:
+        pygame.display.set_caption("Repeated Backward A* Grid")
+    
     clock = pygame.time.Clock()
     a = perf_counter()
 
@@ -583,19 +587,20 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
     to_be_added = []
     totalpath = []
 
+
     # loop until the curr is the goal
     while currentStart != goalCoord:
         # look around to all points near the current node
-        if (forward_grid[currentX - 1][currentY] == 1):
+        if currentX > 0 and forward_grid[currentX - 1][currentY] == 1:
             astar_grid[currentX - 1][currentY] = 1
 
-        elif forward_grid[currentX + 1][currentY] == 1:
+        elif currentX < 100 and forward_grid[currentX + 1][currentY] == 1:
             astar_grid[currentX + 1][currentY] = 1
 
-        elif forward_grid[currentX][currentY - 1] == 1:
+        elif currentY > 0 and forward_grid[currentX][currentY - 1] == 1:
             astar_grid[currentX][currentY - 1] = 1
 
-        elif forward_grid[currentX][currentY + 1] == 1:
+        elif currentY < 100 and forward_grid[currentX][currentY + 1] == 1:
             astar_grid[currentX][currentY + 1] = 1
 
         # now call astar
@@ -610,6 +615,7 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
         # if we cannot find the path
         if current_path_of_coordinates is []:
             print("The current_path_of_coordinates is empty and thus the path is blocked and cannot be found")
+            totalpath = []
             break
 
         # now follow the path laid by astar in follow_path
@@ -630,7 +636,7 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
             mainEventLoop(pygame)
             screen.fill(BLACK)
             gridColor(screen, forward_grid)
-            # itterate through totalpath and show that on the grid
+            # iterate through totalpath and show that on the grid
             for coordinate in totalpath:
                 # decouple the coordinates
                 totalX, totalY = coordinate
@@ -655,6 +661,11 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
     time.sleep(5)
     pygame.display.quit()
 
+    startx, starty = startCoord
+    endx, endy = goalCoord
+
+    return startx, starty, endx, endy, total_time, len(totalpath)
+
 
 # adaptive A* algorithm
 def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time, goalType):
@@ -674,16 +685,16 @@ def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
     # loop until the curr is the goal
     while currentStart != goalCoord:
         # look around to all points near the current node
-        if (forward_grid[currentX - 1][currentY] == 1):
+        if currentX > 0 and forward_grid[currentX - 1][currentY] == 1:
             astar_grid[currentX - 1][currentY] = 1
 
-        elif forward_grid[currentX + 1][currentY] == 1:
+        elif currentX < 100 and forward_grid[currentX + 1][currentY] == 1:
             astar_grid[currentX + 1][currentY] = 1
 
-        elif forward_grid[currentX][currentY - 1] == 1:
+        elif currentY > 0 and forward_grid[currentX][currentY - 1] == 1:
             astar_grid[currentX][currentY - 1] = 1
 
-        elif forward_grid[currentX][currentY + 1] == 1:
+        elif currentY < 100 and forward_grid[currentX][currentY + 1] == 1:
             astar_grid[currentX][currentY + 1] = 1
 
         # now call astar
@@ -736,4 +747,9 @@ def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
     print("The Total Time Elapsed is: " + str(total_time))
     time.sleep(5)
     pygame.display.quit()
+
+    startx, starty = startCoord
+    endx, endy = goalCoord
+
+    return startx, starty, endx, endy, total_time, len(totalpath)
 

@@ -16,6 +16,10 @@ BLOCK_WIDTH = 5
 BLOCK_HEIGHT = 5
 
 
+def grid_copy(grid):
+    return [grid[i].copy() for i in range(len(grid))]
+    
+
 def grid_init(start, goal):
     grid = []
     for row in range(101):
