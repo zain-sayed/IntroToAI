@@ -449,7 +449,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen, goalType):
         # if openlist is 0, then we cannot find the goal and have exhausted all our options
         if len(openlist) == 0:
             print("In Astar and cannot find goal, path is blocked!")
-            time.sleep(60)
+            time.sleep(1)
             path_of_coordinates = []
             return path_of_coordinates
         # else, we found the goal and we need to backtrack and return the list of coords
@@ -577,7 +577,7 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
         pygame.display.set_caption("Repeated Forward A* Grid")
     else:
         pygame.display.set_caption("Repeated Backward A* Grid")
-    
+
     clock = pygame.time.Clock()
     a = perf_counter()
 
@@ -613,7 +613,7 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
 
 
         # if we cannot find the path
-        if current_path_of_coordinates is []:
+        if current_path_of_coordinates == []:
             print("The current_path_of_coordinates is empty and thus the path is blocked and cannot be found")
             totalpath = []
             break
@@ -658,7 +658,7 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
     b = perf_counter()
     total_time = b - a
     print("The Total Time Elapsed is: " + str(total_time))
-    time.sleep(5)
+    # time.sleep(1)
     pygame.display.quit()
 
     startx, starty = startCoord
@@ -701,7 +701,7 @@ def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
         current_path_of_coordinates = astar(pygame, astar_grid, (currentX, currentY), goalCoord, time, clock, screen, goalType)
 
         # if we cannot find the path
-        if current_path_of_coordinates is []:
+        if current_path_of_coordinates == []:
             print("The current_path_of_coordinates is empty and thus the path is blocked and cannot be found")
             break
 
