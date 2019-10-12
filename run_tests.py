@@ -22,7 +22,7 @@ def main():
 		for sheet in sheets:
 			sheet.write(0, i, columns[i])
 
-	random.seed(5)
+	random.seed(1)
 
 	for i in range(NUM_TIMES):
 		pygame.init()
