@@ -35,7 +35,8 @@ def comparef(x, y, node, openlist):
     for i in openlist:
         if i.coordinates == (x, y):
             # if node is less than, update it
-            if node.f < i.f:
+            # if node.f < i.f:
+            if node.smaller_than(i):
                 i.f = node.f
                 i.parent = node.parent
                 i.g = node.g
@@ -449,7 +450,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen, goalType):
         # if openlist is 0, then we cannot find the goal and have exhausted all our options
         if len(openlist) == 0:
             print("In Astar and cannot find goal, path is blocked!")
-            time.sleep(1)
+            # time.sleep(1)
             path_of_coordinates = []
             return path_of_coordinates
         # else, we found the goal and we need to backtrack and return the list of coords
@@ -663,7 +664,7 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
 
     startx, starty = startCoord
     endx, endy = goalCoord
-
+    
     return startx, starty, endx, endy, total_time, len(totalpath)
 
 
@@ -745,7 +746,7 @@ def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
     b = perf_counter()
     total_time = b - a
     print("The Total Time Elapsed is: " + str(total_time))
-    time.sleep(5)
+    # time.sleep(5)
     pygame.display.quit()
 
     startx, starty = startCoord

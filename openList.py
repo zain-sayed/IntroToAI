@@ -11,7 +11,7 @@ class Treenode:
         self.parent = parent
         self.coordinates = coordinates
 
-    def smaller_than(self, other_tn, smaller_g = True):
+    def smaller_than(self, other_tn, smaller_g = SMALLER):
         if self.f < other_tn.f:
             return True
         if self.f == other_tn.f and ((smaller_g and self.g < other_tn.g) or ((not smaller_g) and self.g > other_tn.g)):

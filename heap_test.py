@@ -2,8 +2,10 @@ from openList import *
 import random
 
 openlist = []
-for i in range(10):
-	openlist = insert(Treenode(random.randint(0, 3), random.randint(0, 3), None, None, None), openlist)
+for i in range(20):
+	tn = Treenode(random.randint(0, 4), random.randint(0, 4), None, None, None)
+	print("Inserting f = {}, g = {}".format(tn.f, tn.g))
+	openlist = insert(tn, openlist)
 
 while len(openlist) != 0:
 	node, openlist = pop(openlist)
