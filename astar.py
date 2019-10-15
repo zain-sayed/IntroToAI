@@ -184,7 +184,7 @@ def check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
 
 
 # function checks the 4 directions on the grid and inserts if needed
-def check_nodes_adaptive(grid, openlist, closedlist, currentNode, x, y, goalX, goalY):
+def check_nodes_adaptive(grid, openlist, closedlist, currentNode, x, y, goalX, goalY, adaptivelist):
     # declare vars
     g = currentNode.g + 1
     prevG = 0
@@ -399,7 +399,7 @@ def check_nodes_adaptive(grid, openlist, closedlist, currentNode, x, y, goalX, g
 #
 # The goalCoord remains constant, but the startCoord must begin from the last blocked node from the
 # previous call, which's coordinates will be passed in to this new call of astar as the startCoord
-def astar(pygame, grid, startCoord, goalCoord, time, clock, screen, goalType):
+def astar(pygame, grid, startCoord, goalCoord, time, clock, screen, goalType, adaptivelist):
     # create the openlist and the closedlists
     openlist = []
     closedlist = []
@@ -432,7 +432,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen, goalType):
 
         # now check the 4 different directions and add to open list if needed (update if there, skip if blocked)
         if goalType == 8:
-            openlist = check_nodes_adaptive(grid, openlist, closedlist, currentNode, x, y, goalX, goalY)
+            openlist = check_nodes_adaptive(grid, openlist, closedlist, currentNode, x, y, goalX, goalY, adaptivelist)
         else:
             openlist = check_nodes(grid, openlist, closedlist, currentNode, x, y, goalX, goalY)
 
@@ -471,18 +471,19 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen, goalType):
             path_of_coordinates.append(ptr.coordinates)
 
     # now keep remaining screen up for 60 seconds
+    adaptivelist = closedlist
     # forward
     if goalType == 3:
         path_of_coordinates.reverse()
-        return path_of_coordinates
+        return path_of_coordinates, adaptivelist
     # backward
     elif goalType == 2:
-        return path_of_coordinates
+        return path_of_coordinates, adaptivelist
     # adaptive
     elif goalType == 8:
-        adaptivelist = closedlist
+        #adaptivelist = closedlist
         path_of_coordinates.reverse()
-        return path_of_coordinates
+        return path_of_coordinates, adaptivelist
 
 
 # follows the path given by astar
@@ -572,6 +573,7 @@ def follow_path(pygame, pathlist, forward_grid, time, clock, screen):
 # repeated forward A* algorithm
 def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time, goalType):
     # Set the width and height of the screen [width, height], clock and display grid (and counter for time elapsed)
+    adaptivelist = []
     size = (505, 505)
     screen = pygame.display.set_mode(size)
     if goalType == 3:
@@ -607,10 +609,10 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
         # now call astar
         # forward
         if goalType == 3:
-            current_path_of_coordinates = astar(pygame, astar_grid, (currentX, currentY), goalCoord, time, clock, screen, goalType)
+            current_path_of_coordinates, adaptivelist = astar(pygame, astar_grid, (currentX, currentY), goalCoord, time, clock, screen, goalType, adaptivelist)
         # backward
         elif goalType == 2:
-            current_path_of_coordinates = astar(pygame, astar_grid, goalCoord, (currentX, currentY), time, clock, screen, goalType)
+            current_path_of_coordinates, adaptivelist = astar(pygame, astar_grid, goalCoord, (currentX, currentY), time, clock, screen, goalType, adaptivelist)
 
 
         # if we cannot find the path
@@ -671,6 +673,7 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
 # adaptive A* algorithm
 def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time, goalType):
     # Set the width and height of the screen [width, height], clock and display grid (and counter for time elapsed)
+    adaptivelist = []
     size = (505, 505)
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Repeated Forward A* Grid")
@@ -699,7 +702,7 @@ def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
             astar_grid[currentX][currentY + 1] = 1
 
         # now call astar
-        current_path_of_coordinates = astar(pygame, astar_grid, (currentX, currentY), goalCoord, time, clock, screen, goalType)
+        current_path_of_coordinates, adaptivelist = astar(pygame, astar_grid, (currentX, currentY), goalCoord, time, clock, screen, goalType, adaptivelist)
 
         # if we cannot find the path
         if current_path_of_coordinates == []:

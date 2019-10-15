@@ -8,6 +8,7 @@ import time
 from astar import *
 from openList import *
 from gridFunc import *
+import xlwt
 
 # Define some colors
 BLACK = (0, 0, 0)
@@ -63,7 +64,7 @@ pygame.init()
 repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time, 3)
 
 # call the backward Astar algorithm
-repeated_astar(pygame, backward_grid, backward_astar_grid, startCoord, goalCoord, time, 2)
+#repeated_astar(pygame, backward_grid, backward_astar_grid, startCoord, goalCoord, time, 2)
 
 # call adaptive Astar algorithm
 adaptive_astar(pygame, adaptive_grid, adaptive_astar_grid, startCoord, goalCoord, time, 8)
