@@ -452,7 +452,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen, goalType, ad
             print("In Astar and cannot find goal, path is blocked!")
             # time.sleep(1)
             path_of_coordinates = []
-            return path_of_coordinates
+            return path_of_coordinates, adaptivelist
         # else, we found the goal and we need to backtrack and return the list of coords
         elif goalfound is True:
             ptr = closedlist[-1]

@@ -5,7 +5,7 @@ import xlwt
 import time
 import random
 
-NUM_TIMES = 50
+NUM_TIMES = 10
 
 def write_row(sheet, row, row_list):
 	for i in range(len(row_list)):
