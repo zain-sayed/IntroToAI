@@ -18,6 +18,9 @@ class Treenode:
             return True
         return False
 
+    @staticmethod
+    def copy_treenode(tn):
+        return Treenode(tn.f, tn.g, tn.h, tn.parent, tn.coordinates)
 
 
 ###################################### have to do an equal g value condition  ######################################  

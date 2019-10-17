@@ -197,19 +197,30 @@ def check_nodes_adaptive(grid, openlist, closedlist, currentNode, x, y, goalX, g
 
     if (x - 1) > -1:
         # create the node
-        for item in adaptivelist:
-            # goal node
-            if item.coordinates == (goalX, goalY):
-                goalG = item.g
-                break
-        for item in adaptivelist:
-            # prev node
-            if item.coordinates == (x - 1, y):
-                prevG = item.g
-                h = findh_adaptive(goalG, prevG)
-                f = findf_adapt(g, goalG, prevG)
-                isFound = True
-                break
+        # for item in adaptivelist:
+        #     # goal node
+        #     if item.coordinates == (goalX, goalY):
+        #         goalG = item.g
+        #         break
+        item = adaptivelist.get((goalX, goalY))
+        if item:
+            goalG = item.g
+
+        # for item in adaptivelist:
+        #     # prev node
+        #     if item.coordinates == (x - 1, y):
+        #         prevG = item.g
+        #         h = findh_adaptive(goalG, prevG)
+        #         f = findf_adapt(g, goalG, prevG)
+        #         isFound = True
+        #         break
+        item = adaptivelist.get((x - 1, y))
+        if item:
+            prevG = item.g
+            h = findh_adaptive(goalG, prevG)
+            f = findf_adapt(g, goalG, prevG)
+            isFound = True
+
         # the item is not in the closed adaptivelist
         if isFound is False:
             h = findh(x-1, y, goalX, goalY)
@@ -247,19 +258,28 @@ def check_nodes_adaptive(grid, openlist, closedlist, currentNode, x, y, goalX, g
     # down node, check bounds of x+1 and then if unblocked=0, blocked=1
     if (x + 1) < 101:
         # create the node
-        for item in adaptivelist:
-            # goal node
-            if item.coordinates == (goalX, goalY):
-                goalG = item.g
-                break
-        for item in adaptivelist:
-            # prev node
-            if item.coordinates == (x + 1, y):
-                prevG = item.g
-                h = findh_adaptive(goalG, prevG)
-                f = findf_adapt(g, goalG, prevG)
-                isFound = True
-                break
+        # for item in adaptivelist:
+        #     # goal node
+        #     if item.coordinates == (goalX, goalY):
+        #         goalG = item.g
+        #         break
+        item = adaptivelist.get((goalX, goalY))
+        if item:
+            goalG = item.g
+        item = adaptivelist.get((x + 1, y))
+        if item:
+            prevG = item.g
+            h = findh_adaptive(goalG, prevG)
+            f = findf_adapt(g, goalG, prevG)
+            isFound = True
+        # for item in adaptivelist:
+        #     # prev node
+        #     if item.coordinates == (x + 1, y):
+        #         prevG = item.g
+        #         h = findh_adaptive(goalG, prevG)
+        #         f = findf_adapt(g, goalG, prevG)
+        #         isFound = True
+        #         break
         # the item is not in the closed adaptivelist
         if isFound is False:
             h = findh(x + 1, y, goalX, goalY)
@@ -294,20 +314,29 @@ def check_nodes_adaptive(grid, openlist, closedlist, currentNode, x, y, goalX, g
 
     # right node, check bounds of y+1 and then if unblocked=0, blocked=1
     if (y + 1) < 101:
-        # create the node
-        for item in adaptivelist:
-            # goal node
-            if item.coordinates == (goalX, goalY):
-                goalG = item.g
-                break
-        for item in adaptivelist:
-            # prev node
-            if item.coordinates == (x, y+1):
-                prevG = item.g
-                h = findh_adaptive(goalG, prevG)
-                f = findf_adapt(g, goalG, prevG)
-                isFound = True
-                break
+        item = adaptivelist.get((goalX, goalY))
+        if item:
+            goalG = item.g
+        item = adaptivelist.get((x, y + 1))
+        if item:
+            prevG = item.g
+            h = findh_adaptive(goalG, prevG)
+            f = findf_adapt(g, goalG, prevG)
+            isFound = True
+        # # create the node
+        # for item in adaptivelist:
+        #     # goal node
+        #     if item.coordinates == (goalX, goalY):
+        #         goalG = item.g
+        #         break
+        # for item in adaptivelist:
+        #     # prev node
+        #     if item.coordinates == (x, y+1):
+        #         prevG = item.g
+        #         h = findh_adaptive(goalG, prevG)
+        #         f = findf_adapt(g, goalG, prevG)
+        #         isFound = True
+        #         break
         # the item is not in the closed adaptivelist
         if isFound is False:
             h = findh(x, y+1, goalX, goalY)
@@ -342,20 +371,29 @@ def check_nodes_adaptive(grid, openlist, closedlist, currentNode, x, y, goalX, g
 
     # left node, check bounds of y-1 and then if unblocked=0, blocked=1
     if (y - 1) > -1:
-        # create the node
-        for item in adaptivelist:
-            # goal node
-            if item.coordinates == (goalX, goalY):
-                goalG = item.g
-                break
-        for item in adaptivelist:
-            # prev node
-            if item.coordinates == (x, y-1):
-                prevG = item.g
-                h = findh_adaptive(goalG, prevG)
-                f = findf_adapt(g, goalG, prevG)
-                isFound = True
-                break
+        item = adaptivelist.get((goalX, goalY))
+        if item:
+            goalG = item.g
+        item = adaptivelist.get((x, y - 1))
+        if item:
+            prevG = item.g
+            h = findh_adaptive(goalG, prevG)
+            f = findf_adapt(g, goalG, prevG)
+            isFound = True
+        # # create the node
+        # for item in adaptivelist:
+        #     # goal node
+        #     if item.coordinates == (goalX, goalY):
+        #         goalG = item.g
+        #         break
+        # for item in adaptivelist:
+        #     # prev node
+        #     if item.coordinates == (x, y-1):
+        #         prevG = item.g
+        #         h = findh_adaptive(goalG, prevG)
+        #         f = findf_adapt(g, goalG, prevG)
+        #         isFound = True
+        #         break
         # the item is not in the closed adaptivelist
         if isFound is False:
             h = findh(x, y-1, goalX, goalY)
@@ -404,6 +442,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen, goalType, ad
     openlist = []
     closedlist = []
     path_of_coordinates = []
+    next_adaptive = {}
 
     # total time and shortest path
     shortest_path = 0
@@ -438,6 +477,7 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen, goalType, ad
 
         # add current node to closed list and change color
         closedlist.append(currentNode)
+        next_adaptive[(x, y)] = currentNode # NEW CODE ERNEST
         if grid[x][y] == 2:
             count = count + 1
             grid[x][y] = 2
@@ -471,7 +511,8 @@ def astar(pygame, grid, startCoord, goalCoord, time, clock, screen, goalType, ad
             path_of_coordinates.append(ptr.coordinates)
 
     # now keep remaining screen up for 60 seconds
-    adaptivelist = closedlist
+    # adaptivelist = closedlist # COMMENTED OUT CODE ERNEST
+    adaptivelist = next_adaptive
     # forward
     if goalType == 3:
         path_of_coordinates.reverse()
@@ -573,7 +614,7 @@ def follow_path(pygame, pathlist, forward_grid, time, clock, screen):
 # repeated forward A* algorithm
 def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time, goalType):
     # Set the width and height of the screen [width, height], clock and display grid (and counter for time elapsed)
-    adaptivelist = []
+    adaptivelist = {} # [] NEW CODE ERNEST
     size = (505, 505)
     screen = pygame.display.set_mode(size)
     if goalType == 3:
@@ -673,7 +714,7 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
 # adaptive A* algorithm
 def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time, goalType):
     # Set the width and height of the screen [width, height], clock and display grid (and counter for time elapsed)
-    adaptivelist = []
+    adaptivelist = {} # [] NEW CODE ERNEST
     size = (505, 505)
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Repeated Forward A* Grid")
@@ -703,7 +744,6 @@ def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
 
         # now call astar
         current_path_of_coordinates, adaptivelist = astar(pygame, astar_grid, (currentX, currentY), goalCoord, time, clock, screen, goalType, adaptivelist)
-
         # if we cannot find the path
         if current_path_of_coordinates == []:
             print("The current_path_of_coordinates is empty and thus the path is blocked and cannot be found")
