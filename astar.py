@@ -5,8 +5,6 @@ from time import perf_counter
 # global color, black
 BLACK = (0, 0, 0)
 
-# global list of prior closed lists
-adaptivelist = []
 
 # finds h value of a node
 def findh(x, y, goalX, goalY):
@@ -681,12 +679,14 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
             screen.fill(BLACK)
             gridColor(screen, forward_grid)
             # iterate through totalpath and show that on the grid
+            #count = 0
             for coordinate in totalpath:
                 # decouple the coordinates
                 totalX, totalY = coordinate
 
                 # make the coord blue, then display it
                 forward_grid[totalX][totalY] = 9
+                #count = count + 1
                 # Screen things first: helps display the loop, make the node at ptr pink
                 mainEventLoop(pygame)
                 screen.fill(BLACK)
@@ -707,6 +707,7 @@ def repeated_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
 
     startx, starty = startCoord
     endx, endy = goalCoord
+    #print(count)
     
     return startx, starty, endx, endy, total_time, len(totalpath)
 
@@ -767,6 +768,7 @@ def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
             mainEventLoop(pygame)
             screen.fill(BLACK)
             gridColor(screen, forward_grid)
+            #count = 0
             # itterate through totalpath and show that on the grid
             for coordinate in totalpath:
                 # decouple the coordinates
@@ -774,6 +776,7 @@ def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
 
                 # make the coord blue, then display it
                 forward_grid[totalX][totalY] = 9
+                #count = count + 1
                 # Screen things first: helps display the loop, make the node at ptr pink
                 mainEventLoop(pygame)
                 screen.fill(BLACK)
@@ -794,6 +797,7 @@ def adaptive_astar(pygame, forward_grid, astar_grid, startCoord, goalCoord, time
 
     startx, starty = startCoord
     endx, endy = goalCoord
+    #print(count)
 
     return startx, starty, endx, endy, total_time, len(totalpath)
 
